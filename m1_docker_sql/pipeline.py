@@ -2,10 +2,11 @@ import sys
 
 import pandas as pd
 
+# Prints commandline arguments 
 print(sys.argv)
+# Stores argument as variable
+argument = sys.argv[1]
 
-day = sys.argv[1]
+# add some fancy stuff later 😜
 
-# add some fancy stuff later
-
-print(f'I DID THE THING!!! ON DAY = {day}')
+print(f'🤷 I did the thing!!! Here is your blasted arguement back 😤 --> {argument}')

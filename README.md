@@ -17,9 +17,14 @@
     - ENTRYPOINT at 'python', 'pipeline.py'
   - Created pipeline (pipeline.py)
     - imports sys and pandas
-
-I am haing a bit of difficulty with some of the python code,but the container builds successfully.  
+- Successfully built and tested a container that takes an argument and gives an expected result! 😂
 
 **Next steps are:**
-- make docker file behave as instructed
+
+- Make postgres run in docker
+- Import NY taxi data
 - GCP infrastructure with Terraform.
+
+Notes:
+- Build container: `docker build -t test:pandas .`
+- Run docker `docker run -it test:pandas`
