@@ -1,0 +1,22 @@
+
+
+
+# Terminal 1
+    # Setup Postgres 13 container 
+    docker run -it -e POSTGRES_USER="root" -e POSTGRES_PASSWORD="root" -e POSTGRES_DB="ny_taxi" -v $(pwd)/ny_taxi_postgres_data:/var/lib/posgresql/data -p 5410:5432 postgres:13
+
+# Terminal 2
+    # Use pgcli to access container's database
+    pgcli -h localhost -p 5432 -u root -d ny_taxi
+        # Useful commands
+            # Look at list of tables
+            /dt 
+            # Inspect tables
+            /d 'name_of_table'
+
+# Terminal Commands to inspect files (useful for inspecting large tables in commandline)
+    #Show head of file
+    head -n 100 
+    #Show lines in a file
+    wc -l
+

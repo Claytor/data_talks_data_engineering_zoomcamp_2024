@@ -19,12 +19,20 @@
     - imports sys and pandas
 - Successfully built and tested a container that takes an argument and gives an expected result! 😂
 
-**Next steps are:**
-
-- Make postgres run in docker
-- Import NY taxi data
-- GCP infrastructure with Terraform.
-
-Notes:
+- Pull docker image: `docker pull postgres:13`
 - Build container: `docker build -t test:pandas .`
 - Run docker `docker run -it test:pandas`
+
+### 12/21/2023
+
+- Worked on ingesting data into docker file
+- Struggled with port configuration.  I'll handle it tomorrow
+
+### 12/22/2023
+
+- Was able to successfully create postgres container.
+- Explored container with pgcli
+- Used sqlalchemy inside of a jupyter notebook to successfuly ingest data to postgres container.  Verified results with pgcli
+
+**Next steps are:**
+- create a pgadmin container and network with postgres container
