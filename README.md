@@ -41,6 +41,13 @@
 - Accidentily deleted postgres container with injested data  🥴.  Didn't take too long to recreate, but it would have sucked if that happened with a larger database.  Not too much trouble to run the notebook again.  Since I'm using parquet files, It makes me kind of nervous not to be able to see the progress from within the notebook . . . I'll propably need a better monitoring strategy in the future.
   - ⚠️ **MAKE SURE YOU SHUT YOUR CONTAINERS DOWN PROPERLY OR SUFFER THE CONSEQUENCES!!!**
 - I was able to get the containers networkd and talking together.  I'm so stoked I figured it out!
+- Converted ipynb to python script using `jupyter nbconvert` to make a 'poboy' ingestion script.
+  - Used argparse library to parse arguements to containers
+  - This is referred to as a **top-level code environment**  and required a main block `if __name__ == '__main__':`.  I dont exactly know the broader context of why its needed here, but the instructor said it was needed for things we want to run as scripts.
+- Dropped taxi data from container to test script
+- I was running the script bind and it was erroring out.  Went down a rabbit hole for error handling.
+- OMG IT WORKED!!!!!  I successfully ingested data to my containers with a python script!  It ain't much, but its mine!
 
-**Next steps are:**
+#### **Next steps are:**
+
 - write docker compose file

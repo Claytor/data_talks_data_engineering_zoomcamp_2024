@@ -24,7 +24,7 @@ docker run -it \
     dpage/pgadmin4
 
 ################################################################################################
-# Run pgAdmin and postgres containers docker network so they can communicate
+# Run pgAdmin and postgres containers in docker network so they can communicate
 ################################################################################################    
     
 #1) create docker network
@@ -51,6 +51,21 @@ docker run -it \
     dpage/pgadmin4
 
 ################################################################################################
+# Test python ingestion script (not using default local port)
+################################################################################################   
+
+URL='https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2021-01.parquet'
+
+python ingest_data.py \
+    --user=root \
+    --password=root \
+    --host=localhost \
+    --port=5410 \
+    --db=ny_taxi \
+    --table_name=yellow_taxi_trips \
+    --url=%URL
+
+################################################################################################
 # USEFUL COMMANDS
 ################################################################################################  
     # BASH inspect files (useful for inspecting large tables in commandline)
@@ -58,3 +73,5 @@ docker run -it \
         head -n 100 
         #Show lines in a file
         wc -l
+        # Show terminal history
+        history
