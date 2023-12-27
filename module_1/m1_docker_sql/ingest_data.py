@@ -9,6 +9,7 @@ import pandas as pd
 from sqlalchemy import create_engine
 from sqlalchemy.exc import SQLAlchemyError
 
+
 # Main method accepts arguments that were parsed below 
 def main(params):
     user = params.user
@@ -17,7 +18,7 @@ def main(params):
     port = params.port
     db = params.db
     table_name = params.table_name
-    parquet_name = '.,/ny_taxi_postgres_data/output.parquet'
+    parquet_name = 'ny_taxi_postgres_data/output.parquet'
     url = params.url
 
     # Ensure the target directory exists

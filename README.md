@@ -48,6 +48,11 @@
 - I was running the script bind and it was erroring out.  Went down a rabbit hole for error handling.
 - OMG IT WORKED!!!!!  I successfully ingested data to my containers with a python script!  It ain't much, but its mine!
 
+#### **12/27/2023**
+
+- Fixed python script do download data to the intended directory
+-
+
 #### **Next steps are:**
 
 - write docker compose file
