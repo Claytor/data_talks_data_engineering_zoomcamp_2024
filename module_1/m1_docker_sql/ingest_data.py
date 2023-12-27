@@ -5,6 +5,8 @@
 import os
 import argparse
 from time import time
+import pyarrow.parquet as pq
+from tqdm import tqdm
 import pandas as pd
 from sqlalchemy import create_engine
 from sqlalchemy.exc import SQLAlchemyError
@@ -40,6 +42,22 @@ def main(params):
         printprint(f'Error connecting to the database: {e}')
         return
     
+    #     # Read data with PyArrow
+    # try:
+    #     print("Reading parquet file with PyArrow")
+    #     table = pq.read_table(parquet_name)
+    # except Exception as e:
+    #     print(f'Error reading the parquet file: {e}')
+    #     return
+    
+    # # Write head and data to sql database with Pandas
+    # try:
+    #     print('Writing to database')
+    #     pd.DataFrame(table.head(n=0)).to_sql(name=table_name, con=engine, if_exists='replace')
+    #     pd.DataFrame(table.to_pandas()).to_sql(name=table_name, con=engine, if_exists='append')
+    # except SQLAlchemyError as e:
+    #     print(f'Error writing to the database: {e}')
+
     # Read data
     try:
         print("Reading parquet file")

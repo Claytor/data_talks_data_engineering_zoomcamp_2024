@@ -1,41 +1,11 @@
-# services:
-#   postgres:
-#   image: postgres:13
-#   environment:  # Environment variables configure docker image
-#     POSTGRES_USER: airflow # defines user
-#     POSTGRES_PASSOWRD: airflow  # defines db password
-#     POSTGRES_DB: airflow # defines database
-#   volumes:  # Maps folder in file system to use with file system in container 
-#     - postgres-db-volume:/var/lib/postgresql/data # Mount the folder
-#   healthcheck:
-#     test: ["CMD", "pg_isready", "-U", "airflow"]
-#     interval: 5s
-#     retries: 5
-#   restart: always
-
 services:
-  postgres:
+  pgdatabase:
     image: postgres:13
     environment:
-      POSTGRES_USER: airflow
-      POSTGRES_PASSWORD: airflow
-      POSTGRES_DB: airflow
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=ny_taxi
     volumes:
-      - postgres-db-volume:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "airflow"]
-      interval: 5s
-      retries: 5
-    restart: always
-
-volumes:
-  postgres-db-volume:
-
-
-docker run -it \ # Run container with environmental variables
-  -e POSTGRES_USER="root" \ # db password variable
-  -e POSTGRES_PASSWORD="root" \
-  -e POSTGRES_DB="ny_taxi" # database variable
-  -v $(pwd)/ny_taxi_postgres_data:/var/lib/posgresql/data \ # Mount absolute path to data
-  -p 5432:5432 \ # Map port on host machine to port on container
-postgres:13
+      - ./ny_taxi_postgres_data:/var/lib/postgresql/data/rw
+  pgadmin:
+  

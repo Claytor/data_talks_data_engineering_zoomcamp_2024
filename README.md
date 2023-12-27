@@ -48,10 +48,15 @@
 - I was running the script bind and it was erroring out.  Went down a rabbit hole for error handling.
 - OMG IT WORKED!!!!!  I successfully ingested data to my containers with a python script!  It ain't much, but its mine!
 
-#### **12/27/2023**
+#### **12/27/2023** - Making an ingestion container to apply ingestion script to docker network
 
-- Fixed python script do download data to the intended directory
--
+- Fixed python script do download data to the intended local directory
+- Continued to run into confusion about local network vs. docker network.  I got it ironed out.
+- I was able to create a container that:
+  - connected to docker network containing postgres and pgadmin container
+  - installed dependencies to run python ingestion script
+  - programatically downloaded local parque file and ingested data to networked postgress database.
+  - confirmed success with pgAdmin container.
 
 #### **Next steps are:**
 
