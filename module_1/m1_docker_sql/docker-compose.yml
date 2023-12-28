@@ -1,11 +1,35 @@
 services:
+  # postgress container
   pgdatabase:
+    container_name: pg-database
     image: postgres:13
+    networks:
+      - "pg-network"
+    # postgress environmental arguements
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
       - POSTGRES_DB=ny_taxi
+    # where to mount storage in the container.  Specified read/write permission
     volumes:
-      - ./ny_taxi_postgres_data:/var/lib/postgresql/data/rw
+      - "./ny_taxi_postgres_data:/var/lib/postgresql/data"
+    # specify local and container ports
+    ports:
+      - "5410:5432"
+  # pgAdmin container
   pgadmin:
-  
+    container_name: pgAdmin
+    image: dpage/pgadmin4
+    networks:
+      - "pg-network"
+    # pgAdmin environmental arguements
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=root
+    # specify local and container ports
+    ports:
+      - "8080:80"
+
+networks:
+  pg-network:
+    driver: bridge

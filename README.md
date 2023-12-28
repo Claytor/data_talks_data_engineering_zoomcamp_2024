@@ -57,6 +57,8 @@
   - installed dependencies to run python ingestion script
   - programatically downloaded local parque file and ingested data to networked postgress database.
   - confirmed success with pgAdmin container.
+- started working on docker-compose.yml file to spin up containers programmatically.
+- YAY!!! docker compose works!
 
 #### **Next steps are:**
 
