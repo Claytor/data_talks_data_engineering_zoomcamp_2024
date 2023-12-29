@@ -1,0 +1,15 @@
+#############################################
+Terraform Commands
+#############################################
+
+# Get me the providers I need
+init
+
+# What am I about to do?
+plan
+
+# Do what is in the tf files
+apply
+
+# Remove everything defined in the tf files
+destroy

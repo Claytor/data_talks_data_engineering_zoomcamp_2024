@@ -2,11 +2,12 @@
 
 ## Module 1: Introduction & Prerequisites
 
-### 12/20/2023 - Setup
+### 1A: Docker + Postgres
+
+#### 12/20/2023 - Setup
 
 - Set-up GCP account through CLI and made a new project in Google cloud.
 - Installed Docker and Docker Compose.
-- Installed Terraform
 - Prepared a working environment for the course
 - Successfuly created a few trial containers.
   - Made Dockerfile
@@ -21,18 +22,18 @@
   - Build container: `docker build -t 'name_of_container' .`
   - Run docker `docker run -it 'name_of_container'`
 
-### 12/21/2023 - Ingestion configuration
+#### 12/21/2023 - Ingestion configuration
 
 - Worked on ingesting data into docker file
 - Struggled with port configuration.  Couldn't get my data to where it needed to be.  The issue was that my local installation of pgAdmin was already running on the default port.  I had to I'll handle it tomorrow
 
-### 12/22/2023 - First attempt at Docker Network
+#### 12/22/2023 - First attempt at Docker Network
 
 - Was able to successfully create postgres container.
 - Explored container with pgcli
 - Used sqlalchemy inside of a jupyter notebook to successfuly ingest data to postgres container.  Verified results with pgcli
 
-### 12/23/2023 - Lots of progress and hard lessons learned
+#### 12/23/2023 - Lots of progress and hard lessons learned
 
 - Created pgAdmin container and accessed it through localhost
 - Attempted to setup docker network for both pgadmin and postgres. Kept running into issues
@@ -63,9 +64,37 @@
 #### **12/28/2023** - Adding another table to postgres container and practicing SQL skills
 
 - Created jupyter notebook to inspect and ingest NY taxi zone information to postgres container
-- Practiced some basic queries on database
+- Practiced some basic queries on database.
+
+### 1B: Docker and SQL
+
+--------------------
+
+#### **12/29/2023** - Introduction to Terraform Concepts & PCP Pre-Reqauisites
+
+- Began setting up teraform with GCP
+- Created a service account and generated keys
+- Authenticated application credentials with SKD using OAUTH
+- IAM enabeled
+  - view
+  - Storagfe Object Admin
+  - Storage Admin
+  - Big Query Admin
+- Enabled IAM Service Account Credentials API
+- Installed Terraform
+  - ⚠️ **BE VERY SURE OF WHAT YOU'RE DEPLOYING BEFORE YOU DEPLOY IT 🔥💲🔥**
+- Created terraform directory and required files
+  - .terraform-version
+    - specifies what version of terraform to use
+  - main.tf
+    - defines configuration of resources
+  - README.md
+  - variables.tf
+    - stores the variables that get used in the main.tf
+    - these are passed at runtime 
+
+
 
 #### **Next steps are:**
 
-- SQL Practice
 - Setup teraform on gcp
