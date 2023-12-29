@@ -60,6 +60,12 @@
 - started working on docker-compose.yml file to spin up containers programmatically.
 - YAY!!! docker compose works!
 
+#### **12/28/2023** - Adding another table to postgres container and practicing SQL skills
+
+- Created jupyter notebook to inspect and ingest NY taxi zone information to postgres container
+- Practiced some basic queries on database
+
 #### **Next steps are:**
 
-- write docker compose file
+- SQL Practice
+- Setup teraform on gcp
