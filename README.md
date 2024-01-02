@@ -93,6 +93,9 @@
     - stores the variables that get used in the main.tf
     - these are passed at runtime 
 
+#### **01/02/2024** - Creating GCP Infrastructure: Initializing configureation and importing plugins
+
+-Started to work with terraform files.
 
 
 #### **Next steps are:**
