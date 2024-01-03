@@ -97,7 +97,12 @@
 
 -Started to work with terraform files.
 
+#### **01/03/2024**
+- Edited main.tf and variables.tf to work in concert. 
+- Created and then destroyed bucket on gcp.  Great success!
+  - terraform init
+  - terraform plan
+  - terraform apply
+  - terraform destroy
+- Made sure to add appropriate entries for .gitignore
 
-#### **Next steps are:**
-
-- Setup teraform on gcp
