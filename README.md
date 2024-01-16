@@ -37,13 +37,13 @@
 
 - Created pgAdmin container and accessed it through localhost
 - Attempted to setup docker network for both pgadmin and postgres. Kept running into issues
-  - Found the source of the errors was from whitespace in code being run in terminal
+  - Found the source of the errors was from white space in code being run in terminal
   - ⚠️ **CHECK YOUR BASH COMMANDS IN EDITOR FOR WHITESPACE BEFORE PASTING INTO TERMINAL** 😤
-- Accidentily deleted postgres container with injested data  🥴.  Didn't take too long to recreate, but it would have sucked if that happened with a larger database.  Not too much trouble to run the notebook again.  Since I'm using parquet files, It makes me kind of nervous not to be able to see the progress from within the notebook . . . I'll propably need a better monitoring strategy in the future.
+- accidentally deleted postgres container with ingested data  🥴.  Didn't take too long to recreate, but it would have sucked if that happened with a larger database.  Not too much trouble to run the notebook again.  Since I'm using parquet files, It makes me kind of nervous not to be able to see the progress from within the notebook . . . I'll probably need a better monitoring strategy in the future.
   - ⚠️ **MAKE SURE YOU SHUT YOUR CONTAINERS DOWN PROPERLY OR SUFFER THE CONSEQUENCES!!!**
 - I was able to get the containers networkd and talking together.  I'm so stoked I figured it out!
 - Converted ipynb to python script using `jupyter nbconvert` to make a 'poboy' ingestion script.
-  - Used argparse library to parse arguements to containers
+  - Used argparse library to parse arguments to containers
   - This is referred to as a **top-level code environment**  and required a main block `if __name__ == '__main__':`.  I dont exactly know the broader context of why its needed here, but the instructor said it was needed for things we want to run as scripts.
 - Dropped taxi data from container to test script
 - I was running the script bind and it was erroring out.  Went down a rabbit hole for error handling.
@@ -58,7 +58,7 @@
   - installed dependencies to run python ingestion script
   - programatically downloaded local parque file and ingested data to networked postgress database.
   - confirmed success with pgAdmin container.
-- started working on docker-compose.yml file to spin up containers programmatically.
+- started working on docker-compose.yml file to spin up containers programatically.
 - YAY!!! docker compose works!
 
 #### **12/28/2023** - Adding another table to postgres container and practicing SQL skills
@@ -70,14 +70,14 @@
 
 --------------------
 
-#### **12/29/2023** - Introduction to Terraform Concepts & PCP Pre-Reqauisites
+#### **12/29/2023** - Introduction to Terraform Concepts & PCP Pre-Requisites
 
 - Began setting up teraform with GCP
 - Created a service account and generated keys
 - Authenticated application credentials with SKD using OAUTH
-- IAM enabeled
+- IAM enabled
   - view
-  - Storagfe Object Admin
+  - storage Object Admin
   - Storage Admin
   - Big Query Admin
 - Enabled IAM Service Account Credentials API
@@ -93,11 +93,12 @@
     - stores the variables that get used in the main.tf
     - these are passed at runtime 
 
-#### **01/02/2024** - Creating GCP Infrastructure: Initializing configureation and importing plugins
+#### **01/02/2024** - Creating GCP Infrastructure: Initializing configuration and importing plugins
 
 -Started to work with terraform files.
 
 #### **01/03/2024**
+
 - Edited main.tf and variables.tf to work in concert. 
 - Created and then destroyed bucket on gcp.  Great success!
   - terraform init
@@ -105,4 +106,18 @@
   - terraform apply
   - terraform destroy
 - Made sure to add appropriate entries for .gitignore
+
+#### **01/15/2024** - Created Ubuntu VM on GCP and Configured
+
+- Generated ssh keys and imported public key to GCP admin.
+- SSH into vm and ran htop to confirm machine was working!
+- Used vim for editing readme because I'm a glutton for punishment.
+- Installed anaconda on vm
+- Installed docker on vm
+- created ssh config file to ssh into vm locally
+- Installed SSH extension for vscode
+- Added user to docker group on vm to run without root
+- Downloaded docker compose, made executable, and added to path variable
+	- `chmod +x docker-compose`
+	-  
 
