@@ -121,7 +121,7 @@
 	- `chmod +x docker-compose`
 	-  
 
-#### **01/17/2024** - Continued setting up Cloud Environment
+#### **01/17/2024** - Finished setting up Cloud Environment
 
 - generated ssh keys for github and cloned personal repo to vm
 - installed devcontainer for class repo
@@ -131,3 +131,6 @@
 - set GOOGLE_APPLICATION_CREDENTIALS environmental variable
 - Activated service account credentials
 - Tested terraform (plan/apply) on vm.
+- Setup global user name and email on gitconfig
+- Pushed changes to github from vm.
+- NOTE: There is still a little wonkyness with port forwarding.  I'll need to iron that out later.
