@@ -121,3 +121,13 @@
 	- `chmod +x docker-compose`
 	-  
 
+#### **01/17/2024** - Continued setting up Cloud Environment
+
+- generated ssh keys for github and cloned personal repo to vm
+- installed devcontainer for class repo
+- forwarded ports for jupyter and pgadmin
+- installed terraform binary from website (wget, unzip, rm)
+- transferred local gcp credentials to VM in .gcp directory using sftp and  put 
+- set GOOGLE_APPLICATION_CREDENTIALS environmental variable
+- Activated service account credentials
+- Tested terraform (plan/apply) on vm.
