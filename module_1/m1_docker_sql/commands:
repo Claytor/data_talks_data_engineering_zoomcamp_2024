@@ -54,7 +54,7 @@ docker run -it \
     dpage/pgadmin4
 
 ################################################################################################
-# Test python ingestion script (not using default local port)
+# Test python ingestion script
 ################################################################################################   
 
 URL='https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2021-01.parquet'
