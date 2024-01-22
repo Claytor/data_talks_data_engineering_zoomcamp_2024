@@ -15,7 +15,7 @@ services:
       - "./ny_taxi_postgres_data:/var/lib/postgresql/data"
     # specify local and container ports
     ports:
-      - "5410:5432"
+      - "5432:5432"
   # pgAdmin container
   pgadmin:
     container_name: pgAdmin
