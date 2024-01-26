@@ -14,7 +14,7 @@ docker run -it \
 # Use pgcli to access postgres database via local shell
 ################################################################################################  
 
-pgcli -h localhost -p 5410 -u root -d ny_taxi
+pgcli -h localhost -p 5432 -u root -d ny_taxi
     
 ################################################################################################
 # Run pgAdmin container - More user friendly than cli, but can't access postgres container (yet) 
