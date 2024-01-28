@@ -134,3 +134,11 @@
 - Setup global user name and email on gitconfig
 - Pushed changes to github from vm.
 - NOTE: There is still a little wonkyness with port forwarding.  I'll need to iron that out later.
+
+#### **01/24/2024** - Repeats
+
+- Successfully modified all previously created code to run natively in my container.
+
+#### **01/28/2024** - The reconing
+
+- Finished and submitted my assessment for the first module.
