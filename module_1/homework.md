@@ -60,33 +60,54 @@ Download this data and put it into Postgres (with jupyter notebooks or with a pi
     > Tip: started and finished on 2019-09-18.
    
     > Remember that `lpep_pickup_datetime` and `lpep_dropoff_datetime` columns are in the format timestamp (date and hour+min+sec) and not in date.
+```sql
+SELECT
+	COUNT(lpep_pickup_datetime) AS pickup
+FROM green_taxi_trips
+	WHERE lpep_pickup_datetime >= '2019-09-18 00:00:00'
+		AND lpep_pickup_datetime < '2019-09-19 00:00:00'
+ORDER BY pickup DESC;
+```
 
 - 15767
-- 15612
-- 15859
-- 89009
 
 ## Question 4. Largest trip for each day
 
 Which was the pick up day with the largest trip distance
 Use the pick up time for your calculations.
-
-- 2019-09-18
-- 2019-09-16
+```sql
+SELECT 
+	CAST(lpep_pickup_datetime AS DATE) AS Day,
+	MAX(trip_distance) AS Distance
+FROM green_taxi_trips
+GROUP BY CAST(lpep_pickup_datetime AS DATE)
+ORDER BY Distance DESC
+LIMIT 1;
+```
 - 2019-09-26
-- 2019-09-21
-
 
 ## Question 5. Three biggest pick up Boroughs
 
 Consider lpep_pickup_datetime in '2019-09-18' and ignoring Borough has Unknown
 
 Which were the 3 pick up Boroughs that had a sum of total_amount superior to 50000?
- 
+
+```SQL
+SELECT 
+    z."Borough",
+    SUM(gt.total_amount) AS TotalRevenue
+FROM green_taxi_trips AS gt
+JOIN zones AS z
+    ON gt."PULocationID" = z."LocationID"
+WHERE CAST(gt.lpep_pickup_datetime AS DATE) = '2019-09-18'
+    AND z."Borough" != 'Unknown'
+GROUP BY z."Borough"
+HAVING SUM(gt.total_amount) > 50000
+ORDER BY TotalRevenue DESC
+LIMIT 3;
+```
 - "Brooklyn" "Manhattan" "Queens"
-- "Bronx" "Brooklyn" "Manhattan"
-- "Bronx" "Manhattan" "Queens" 
-- "Brooklyn" "Queens" "Staten Island"
+
 
 
 ## Question 6. Largest tip
