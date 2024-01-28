@@ -115,14 +115,23 @@ LIMIT 3;
 For the passengers picked up in September 2019 in the zone name Astoria which was the drop off zone that had the largest tip?
 We want the name of the zone, not the id.
 
-Note: it's not a typo, it's `tip` , not `trip`
+```sql
+SELECT 
+    dropoff_zone."Zone" AS DropoffZone,
+    MAX(gt.tip_amount) AS LargestTip
+FROM green_taxi_trips AS gt
+JOIN zones AS pickup_zone
+    ON gt."PULocationID" = pickup_zone."LocationID"
+JOIN zones AS dropoff_zone
+    ON gt."DOLocationID" = dropoff_zone."LocationID"
+WHERE pickup_zone."Zone" = 'Astoria'
+    AND DATE_TRUNC('month', gt.lpep_pickup_datetime) = DATE '2019-09-01'
+GROUP BY dropoff_zone."Zone"
+ORDER BY LargestTip DESC
+LIMIT 1;
+```
 
-- Central Park
-- Jamaica
 - JFK Airport
-- Long Island City/Queens Plaza
-
-
 
 ## Terraform
 
@@ -143,6 +152,68 @@ After updating the main.tf and variable.tf files run:
 terraform apply
 ```
 
+```bash
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # google_bigquery_dataset.tcb-demo-bucket will be created
+  + resource "google_bigquery_dataset" "tcb-demo-bucket" {
+      + creation_time              = (known after apply)
+      + dataset_id                 = "tcb_demo_dataset"
+      + default_collation          = (known after apply)
+      + delete_contents_on_destroy = false
+      + effective_labels           = (known after apply)
+      + etag                       = (known after apply)
+      + id                         = (known after apply)
+      + is_case_insensitive        = (known after apply)
+      + last_modified_time         = (known after apply)
+      + location                   = "US"
+      + max_time_travel_hours      = (known after apply)
+      + project                    = "zoomcamp-2024"
+      + self_link                  = (known after apply)
+      + storage_billing_model      = (known after apply)
+      + terraform_labels           = (known after apply)
+    }
+
+  # google_storage_bucket.demo-bucket will be created
+  + resource "google_storage_bucket" "demo-bucket" {
+      + effective_labels            = (known after apply)
+      + force_destroy               = true
+      + id                          = (known after apply)
+      + location                    = "US"
+      + name                        = "tcb-terraform-demo-terra-bucket"
+      + project                     = (known after apply)
+      + public_access_prevention    = (known after apply)
+      + self_link                   = (known after apply)
+      + storage_class               = "STANDARD"
+      + terraform_labels            = (known after apply)
+      + uniform_bucket_level_access = (known after apply)
+      + url                         = (known after apply)
+
+      + lifecycle_rule {
+          + action {
+              + type = "AbortIncompleteMultipartUpload"
+            }
+          + condition {
+              + age                   = 1
+              + matches_prefix        = []
+              + matches_storage_class = []
+              + matches_suffix        = []
+              + with_state            = (known after apply)
+            }
+        }
+    }
+
+Plan: 2 to add, 0 to change, 0 to destroy.
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value:
+```
 Paste the output of this command into the homework submission form.
 
 

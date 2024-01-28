@@ -1,6 +1,6 @@
 variable "credentials" {
   description = "My Credentials"
-  default     = "../credentials/zoomcamp-2024-8326022942ed.json"
+  default     = "~/.gcp/zoomcamp-2024-8326022942ed.json"
   #ex: if you have a directory where this file is called keys with your service account json file
 }
 
