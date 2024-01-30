@@ -142,3 +142,68 @@
 #### **01/28/2024** - The reconing
 
 - Finished and submitted my assessment for the first module.
+
+## Module 2: Workflow Orchestration
+
+#### **01/29/2024** - Introduction to Mage 
+
+##### Notes on orchestration
+- Mage and postgres will run in a docker image
+- Archetecture
+  - Extract 
+    - Pull data from a source (API-NYC taxi data set)
+  - Transform
+    - Data cleaning, transformation, and partitioning.
+  - Load
+    - API to Mage, Mage to Postgres, GCS, BigQuery
+- Orchestraton is the process of dependency management facilitated through automation.  The idea is to minimize manual work.  A good idea is to minimize as much work as possible.
+  - The data orchestrator manages scheduling, triggering, monitoring, and resource allocation.
+  - Every workflow requires sequential steps.  Porly sequenced transformations mess up your data
+  - A good orchestrator handles
+    - handles workflow management and dependency
+    - automation
+    - error handling (because crap breaks)
+    - recovery (because when it breaks, you need to fix it)
+    - Monotoring and alerting
+    - resorce optimizaiton
+    - observability (viewing the entire pipeline proccesses)
+    - Debugging
+    - Compliance/auditing
+
+##### Notes on Mage
+
+- Mage is an open-source ETL tool
+  - projects
+  - pipelines
+  - blocks (sensors, conditionals, dynamics, webhooks, etc)
+    - load
+    - transform
+    - export
+  - Engineering best practices
+    - In-line testing and debugging
+    - Fully-features observability
+      - transfomations in one place
+    - DRY principles (Don't Repeat Yourself)
+- Core components of Mage
+  - Projects
+    - Pipelines (Called dags on other products)
+      - Blocks (Bits of code that are run in your pipelines)
+- Anatomy of a block
+  - Imports
+  - Decorator
+  - Function (must return a dataframe)
+  - Assertion
+
+##### Setting up mage for the course
+
+- Pulled repo
+- Ran 
+```bash 
+cp dev.env .env
+```
+  - moves the dev environment to the .env to keep you from pushing secrets.
+```bash
+docker-compose up
+```
+to download the container in the exercise
+- Stink!  I ran out of space on my vm.  Need to shut it down and give it more space.
