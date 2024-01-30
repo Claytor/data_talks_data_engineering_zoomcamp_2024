@@ -207,3 +207,5 @@ docker-compose up
 ```
 to download the container in the exercise
 - Stink!  I ran out of space on my vm.  Need to shut it down and give it more space.
+- Okay, I'm back up. Gave myself 100 gb
+- Woohoo!  Ran first pipeline in Mage!  Now I need to make my own!
