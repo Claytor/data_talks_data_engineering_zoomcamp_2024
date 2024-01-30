@@ -209,3 +209,19 @@ to download the container in the exercise
 - Stink!  I ran out of space on my vm.  Need to shut it down and give it more space.
 - Okay, I'm back up. Gave myself 100 gb
 - Woohoo!  Ran first pipeline in Mage!  Now I need to make my own!
+
+#### **01/29/2024** - Making My First Pipeline in Mage 
+- Edited `io_confit.yml` to add dev provile to inject local .env variables into docker container.  You can do this both in vscode and in mage.  The injection uses Jinga Templating
+```yml
+ # Development pipeline
+ dev:
+  POSTGRES_CONNECT_TIMEOUT: 10
+  POSTGRES_DBNAME: "{{ env_var('POSTGRES_DBNAME') }}"
+  POSTGRES_SCHEMA: "{{ env_var('POSTGRES_SCHEMA') }}"
+  POSTGRES_USER: "{{ env_var('POSTGRES_USER') }}"
+  POSTGRES_PASSWORD: "{{ env_var('POSTGRES_PASSWORD') }}"
+  POSTGRES_HOST: "{{ env_var('POSTGRES_HOST') }}"
+  POSTGRES_PORT: "{{ env_var('POSTGRES_PORT') }}"
+```
+- Added a data loader to pipeline to test postgres connection.  Great success
+![Alt text](images/data_loader.png)
