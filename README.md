@@ -211,6 +211,7 @@ to download the container in the exercise
 - Woohoo!  Ran first pipeline in Mage!  Now I need to make my own!
 
 #### **01/29/2024** - Making My First Pipeline in Mage 
+
 - Edited `io_confit.yml` to add dev provile to inject local .env variables into docker container.  You can do this both in vscode and in mage.  The injection uses Jinga Templating
 ```yml
  # Development pipeline
@@ -225,3 +226,20 @@ to download the container in the exercise
 ```
 - Added a data loader to pipeline to test postgres connection.  Great success
 ![Alt text](images/data_loader.png)
+
+#### **01/31/2024** - Slightly more advanced pipeline.
+  - Worked on a new pipeline that pulls data, performs a light transformation, and writes it postgres
+  - Extract - Data Loader `load_api_data`
+    - Created function to download taxi data and change the dtypes of the columns.
+      - We need to map out the datatypes for pandas when loading .csv
+      - we need to return the data as csv because that's how you pass frames between blocks in Mage
+  - Transform - Data Transformation Block `transform_taxi_data`
+    - There is some wonkyness in the data (such that there are trips with 0 passengers)
+    - We handle this with some pre-proccessing with a transformer.  
+    - Added a `@test` decorator
+  - Load - Data Exporter block (python, postgres) 'taxi_data_to_postgres'
+    - Takes data from last cell, opens connection to postgres, exports data to the indicated schema and drops it in.
+
+WOOHOO, My first "local" ETL Pipeline!
+
+![Alt text](images/baby_etl.png)
