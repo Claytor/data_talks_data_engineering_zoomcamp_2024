@@ -243,3 +243,6 @@ to download the container in the exercise
 WOOHOO, My first "local" ETL Pipeline!
 
 ![Alt text](images/baby_etl.png)
+
+#### **02/01/24** Mage to GCP
+ - Began setting up access to gcp so it can talk with MAGE
