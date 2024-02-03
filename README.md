@@ -265,16 +265,24 @@ VM is ready
 ✅ Successfully mounted [REMOTE_DIR] to [LOCAL_DIR]
 🛑 Do you want to shut down the VM? (y/n)
 ```
-- Create GCP Bucket
+1) **Create GCP Bucket**
   - Go to google cloud storage
   - Create a bucket `claytor-mage`
   - Make sure "Enforce public access prevention on this bucket" is enabled
-- Create Service Account for `claytor-mage`
+2) **Create Service Account for `claytor-mage**`
   - I set access to owner.  Its very permissive.  Would need to be more limiting in the future.
   - Download key as json
   - Copy it into the Mage project
-  - Create Service Volume
- - Authentication
- - Big Query
- - Pipeline
- - Upload to GCP
+3) **Create Service Volume**
+  - created a volume `claytor-mage`
+**4) Authentication**
+  - Edit `io_config.yaml` to add gcp credentials
+  - Delete all but these lines undder `google`
+  
+  ```yaml
+  GOOGLE_SERVICE_ACC_KEY_FILEPATH: "/path/to/your/service/account/key.json"
+  GOOGLE_LOCATION: US # Optional
+  ```
+5) **Big Query**
+6) **Pipeline**
+6) **Upload to GCP**
