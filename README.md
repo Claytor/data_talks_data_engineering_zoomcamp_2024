@@ -159,16 +159,6 @@
 - Orchestraton is the process of dependency management facilitated through automation.  The idea is to minimize manual work.  A good idea is to minimize as much work as possible.
   - The data orchestrator manages scheduling, triggering, monitoring, and resource allocation.
   - Every workflow requires sequential steps.  Porly sequenced transformations mess up your data
-  - A good orchestrator handles
-    - handles workflow management and dependency
-    - automation
-    - error handling (because crap breaks)
-    - recovery (because when it breaks, you need to fix it)
-    - Monotoring and alerting
-    - resorce optimizaiton
-    - observability (viewing the entire pipeline proccesses)
-    - Debugging
-    - Compliance/auditing
 
 ##### Notes on Mage
 
@@ -228,21 +218,63 @@ to download the container in the exercise
 ![Alt text](images/data_loader.png)
 
 #### **01/31/2024** - Slightly more advanced pipeline.
-  - Worked on a new pipeline that pulls data, performs a light transformation, and writes it postgres
-  - Extract - Data Loader `load_api_data`
-    - Created function to download taxi data and change the dtypes of the columns.
-      - We need to map out the datatypes for pandas when loading .csv
-      - we need to return the data as csv because that's how you pass frames between blocks in Mage
-  - Transform - Data Transformation Block `transform_taxi_data`
-    - There is some wonkyness in the data (such that there are trips with 0 passengers)
-    - We handle this with some pre-proccessing with a transformer.  
-    - Added a `@test` decorator
-  - Load - Data Exporter block (python, postgres) 'taxi_data_to_postgres'
-    - Takes data from last cell, opens connection to postgres, exports data to the indicated schema and drops it in.
+Worked on a new pipeline that pulls data, performs a light transformation, and writes it postgres
+- Extract - Data Loader `load_api_data`
+  - Created function to download taxi data and change the dtypes of the columns.
+    - We need to map out the datatypes for pandas when loading .csv
+    - we need to return the data as csv because that's how you pass frames between blocks in Mage
+- Transform - Data Transformation Block `transform_taxi_data`
+  - There is some wonkyness in the data (such that there are trips with 0 passengers)
+  - We handle this with some pre-proccessing with a transformer.  
+  - Added a `@test` decorator
+- Load - Data Exporter block (python, postgres) 'taxi_data_to_postgres'
+  - Takes data from last cell, opens connection to postgres, exports data to the indicated schema and drops it in.
 
 WOOHOO, My first "local" ETL Pipeline!
 
 ![Alt text](images/baby_etl.png)
 
 #### **02/01/24** Mage to GCP
- - Began setting up access to gcp so it can talk with MAGE
+
+Watched videos
+
+#### **02/02/24** Configureing GCP with Mage
+
+***SIDE Quiest: I made a bash script to*** 
+  - start vm
+  - pass the IP to my config file
+  - mount a remote directory on my local machine
+  - shutting down the vm when i'm finished working
+
+``` bash
+🚀 Starting VM [VM_NAME]...
+Starting instance(s) [VM_NAME]...done.
+Updated [https://compute.googleapis.com/compute/v1/projects/[PROJECT_ID]/zones/[ZONE]/instances/[VM_NAME]].
+Instance internal IP is [INTERNAL_IP]
+Instance external IP is [EXTERNAL_IP]
+🔍 Fetching VM's IP address...
+✅ VM IP address is [EXTERNAL_IP]
+⏳ Waiting for VM to start and SSH to become ready...
+🔄 Waiting for VM SSH to become ready...
+🔄 Waiting for VM SSH to become ready...
+🔄 Waiting for VM SSH to become ready...
+🔄 Waiting for VM SSH to become ready...
+VM is ready
+📝 Updating existing SSH config for [ALIAS]...
+📁 Mounting remote directory...
+✅ Successfully mounted [REMOTE_DIR] to [LOCAL_DIR]
+🛑 Do you want to shut down the VM? (y/n)
+```
+- Create GCP Bucket
+  - Go to google cloud storage
+  - Create a bucket `claytor-mage`
+  - Make sure "Enforce public access prevention on this bucket" is enabled
+- Create Service Account for `claytor-mage`
+  - I set access to owner.  Its very permissive.  Would need to be more limiting in the future.
+  - Download key as json
+  - Copy it into the Mage project
+  - Create Service Volume
+ - Authentication
+ - Big Query
+ - Pipeline
+ - Upload to GCP
