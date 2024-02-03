@@ -284,5 +284,12 @@ VM is ready
   GOOGLE_LOCATION: US # Optional
   ```
 5) **Big Query**
-6) **Pipeline**
+- Manually Added titanic_clean.csv to my bucket.
+
+6) **Pipeline** `big_query_test`
+- Create a pipeline in Mage with a sql data loader pointed at BigQuery.
+- Include a simple sql query to test the connection
+
 6) **Upload to GCP**
+- Edit pipeline (`big_query_test`) to remove test sql data loader block
+- Make new python Data Loader
