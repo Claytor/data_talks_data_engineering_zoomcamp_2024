@@ -294,10 +294,11 @@ VM is ready
 - Edit pipeline (`big_query_test`) to remove test sql data loader block
 - Make new python Data Loader
   - Change 
-  ```python
-  bucket_name = 'claytor-mage'
-  object_key = 'titanic_clean.csv'
+    ```python
+    bucket_name = 'claytor-mage'
+    object_key = 'titanic_clean.csv'
     ``` 
+
 #### **02/03/2024** API to GCS
 
 - Created new pipeline `api_to_gcs`
@@ -308,5 +309,21 @@ VM is ready
   - Updated `bucket_name` and `object_key=ny_taxi_data.parquet`.
 - Executed all upstream blocks
   - IT WORKED!
-- Sometimes it's not best practice to write to a single parquet file, especially if dealing wiht large amounts of data.  So we will add another block to partioition by date.
+- It's not best practice to write to a single parquet file, especially if dealing wiht large amounts of data.  So we will add another block to partioition by date.
   - sometimes dates represent a "best practice" scenario for partitioning.
+  - added a generic python data loader called `taxi_to _gcs_partitioned_parquet`.
+  - remove connection to previous block and associate it with the previous block `transform_taxi_data` so that they execute in parallel
+    - in this case, we have to define credentials manually and us the pyarrow library to partion data.
+    - at the beginning of the .py script add
+      ```python
+      import pyarrow as pa
+      import pyarrow.parquet as pq
+      import os
+      ```
+    - We need to tell pyarrow where our credentials are.  They are already set in Mage's config file, but we have to do it manually in this case.
+      go to the terminal and type 
+      ```bash 
+      ls -la
+      ```
+      to find our credentials
+
