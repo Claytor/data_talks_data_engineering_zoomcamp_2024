@@ -275,7 +275,7 @@ VM is ready
   - Copy it into the Mage project
 3) **Create Service Volume**
   - created a volume `claytor-mage`
-**4) Authentication**
+4) **Authentication**
   - Edit `io_config.yaml` to add gcp credentials
   - Delete all but these lines undder `google`
   
@@ -284,12 +284,29 @@ VM is ready
   GOOGLE_LOCATION: US # Optional
   ```
 5) **Big Query**
-- Manually Added titanic_clean.csv to my bucket.
+- Manually Added `titanic_clean`.csv to my bucket.
 
-6) **Pipeline** `big_query_test`
+6) **Test Pipeline** `big_query_test`
 - Create a pipeline in Mage with a sql data loader pointed at BigQuery.
 - Include a simple sql query to test the connection
 
-6) **Upload to GCP**
+6) **Test GCP**
 - Edit pipeline (`big_query_test`) to remove test sql data loader block
 - Make new python Data Loader
+  - Change 
+  ```python
+  bucket_name = 'claytor-mage'
+  object_key = 'titanic_clean.csv'
+    ``` 
+#### **02/03/2024** API to GCS
+
+- Created new pipeline `api_to_gcs`
+- Draged `load_api_data` loader that was previously completed into `api_to_gcs`
+- Dragged `transform_taxi_data` transformner that was previously completed into `api_to_gcs`
+- Connected the two in the tree view
+- Created a Python data exporter `taxi_to_gcs_parquet`
+  - Updated `bucket_name` and `object_key=ny_taxi_data.parquet`.
+- Executed all upstream blocks
+  - IT WORKED!
+- Sometimes it's not best practice to write to a single parquet file, especially if dealing wiht large amounts of data.  So we will add another block to partioition by date.
+  - sometimes dates represent a "best practice" scenario for partitioning.
