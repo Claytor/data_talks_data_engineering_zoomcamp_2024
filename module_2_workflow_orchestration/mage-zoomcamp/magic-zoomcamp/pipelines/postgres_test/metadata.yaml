@@ -40,9 +40,10 @@ run_pipeline_in_one_process: false
 settings:
   triggers: null
 spark_config: {}
-tags: []
+tags:
+- testing
 type: python
-updated_at: '2024-02-03 18:39:22'
+updated_at: '2024-02-03T18:39:22+00:00'
 uuid: postgres_test
 variables_dir: /home/src/mage_data/magic-zoomcamp
 widgets: []

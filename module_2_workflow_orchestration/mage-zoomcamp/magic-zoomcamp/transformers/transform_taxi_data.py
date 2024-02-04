@@ -5,14 +5,9 @@ if 'test' not in globals():
 
 @transformer
 def transform(data, *args, **kwargs):
-    """
-    Looking for the count of cases where there are zero passengers
-    """
+
     print("Rows with zero passengers 🚖:", data['passenger_count'].isin([0]).sum())
     
-    """
-    Returning the data with the zero passenger count removed
-    """
     return data[data['passenger_count'] > 0]
 
 

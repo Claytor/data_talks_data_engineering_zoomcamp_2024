@@ -1,6 +1,21 @@
 blocks:
 - all_upstream_blocks_executed: true
   color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: markdown
+  name: load_api_data_description
+  retry_config: null
+  status: updated
+  timeout: null
+  type: markdown
+  upstream_blocks: []
+  uuid: load_api_data_description
+- all_upstream_blocks_executed: true
+  color: null
   configuration:
     file_source:
       path: data_loaders/load_api_data.py
@@ -19,12 +34,26 @@ blocks:
   uuid: load_api_data
 - all_upstream_blocks_executed: true
   color: null
+  configuration: {}
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: markdown
+  name: transform_taxi_data_descriptor
+  retry_config: null
+  status: updated
+  timeout: null
+  type: markdown
+  upstream_blocks: []
+  uuid: transform_taxi_data_descriptor
+- all_upstream_blocks_executed: true
+  color: null
   configuration:
     file_source:
       path: transformers/transform_taxi_data.py
   downstream_blocks:
-  - taxi_to_gcs_parquet
-  - taxi_to__gcs_partitioned_parquet
+  - export_taxi_to_gcp_parameter
   executor_config: null
   executor_type: local_python
   has_callback: false
@@ -44,15 +73,14 @@ blocks:
   executor_config: null
   executor_type: local_python
   has_callback: false
-  language: python
-  name: taxi_to_gcs_parquet
+  language: markdown
+  name: warning_on_cloning
   retry_config: null
-  status: executed
+  status: updated
   timeout: null
-  type: data_exporter
-  upstream_blocks:
-  - transform_taxi_data
-  uuid: taxi_to_gcs_parquet
+  type: markdown
+  upstream_blocks: []
+  uuid: warning_on_cloning
 - all_upstream_blocks_executed: true
   color: null
   configuration: {}
@@ -61,14 +89,14 @@ blocks:
   executor_type: local_python
   has_callback: false
   language: python
-  name: taxi_to _gcs_partitioned_parquet
+  name: export_taxi_to_gcp_parameter
   retry_config: null
-  status: executed
+  status: updated
   timeout: null
   type: data_exporter
   upstream_blocks:
   - transform_taxi_data
-  uuid: taxi_to__gcs_partitioned_parquet
+  uuid: export_taxi_to_gcp_parameter
 cache_block_output_in_memory: false
 callbacks: []
 concurrency_config: {}
@@ -80,7 +108,7 @@ executor_config: {}
 executor_count: 1
 executor_type: null
 extensions: {}
-name: api_to_gcs
+name: load_to_gcp_parameterized
 notification_config: {}
 remote_variables_dir: null
 retry_config: {}
@@ -88,9 +116,10 @@ run_pipeline_in_one_process: false
 settings:
   triggers: null
 spark_config: {}
-tags: []
+tags:
+- etl
 type: python
-updated_at: '2024-02-04 03:49:13'
-uuid: api_to_gcs
+updated_at: '2024-02-04 20:28:58'
+uuid: load_to_gcp_parameterized
 variables_dir: /home/src/mage_data/magic-zoomcamp
 widgets: []

@@ -365,3 +365,92 @@ VM is ready
           # it would be really slow to read and write
         ```
         ![alt text](images/partioned_parquet_pipeline.png)
+
+#### **02/04/2024** GCT to BigQuery, Parameterized Execution, Backfills, Deploying Mage on GCP
+---
+##### GCS to BigQuery
+
+The next part of the workflow is to move the data from cloud strage to BigQuery (olap database). This mirrors a tradational workflow in DE where you take data from a source, stage it, then write it to a database.
+
+1) Create a new pipeline `gcs_to_bigquery`
+2) Add a python data loader that points to gcs 'load_taxi_gcs'
+  - I'm going to use the parquet instead of the partitioned data for speed
+  - This loads our data from the the indicated bucket and object key
+3) add python transformer to standardize column names
+  - `@transformer` decorator takes the columns as a string
+      - replaces any spaces with underscores `.str.replace(' ', '_')`
+      - replaces ensures all characters are lower-case `.str.lower()`\
+  - We are skipping the assertion here for funsies.
+4) add sql data exporter `write_taxi_to_bigquery` it selects the transformed data and exports it to the `ny_taxy` schema: 
+  - BigQuery and default connection
+  - `ny_taxi` schema
+  - `yellow_cab_data` table
+---
+##### Parameterized Execution
+
+Sometimes we need to run a pipeline with dependency on a certain parameter (like date).  This is making execution of a pipeline dependent on a variable.  It can be useful when calling data from an api and writing files based on a condition.  In this exercise I built off of a previous pipeline and added a date parameter.
+
+- NOTE!!! We will be cloning a pipeline for this exercise.  However, you must make sure you edit the blocks in a safe way so that the do not get changed in other pipelines.
+
+```python
+@data_exporter
+def export_data_to_google_cloud_storage(df: DataFrame, **kwargs) -> None:
+    # Gets key word argument "execution date"
+    now = kwargs.get('execution_date')
+    # Formats now to a string in the format year/month/day
+    now_fpath = now.strftime("%Y/%m/%d")
+    config_path = path.join(get_repo_path(), 'io_config.yaml')
+    config_profile = 'default'
+    bucket_name = 'claytor-mage'
+    # uses fstring to pass our now_fpath 
+    object_key = f'{now_fpath}/daily_trips.parquet'
+    # Its always a good idea to comment out the last block and check what happens with print first.
+    # print(object_key)
+    GoogleCloudStorage.with_config(ConfigFileLoader(config_path, config_profile)).export(
+       df,
+       bucket_name,
+       object_key,
+    )
+```
+---
+##### Backfills
+
+- **Backfilling** is crucial for filling in missing data or correcting erroneous data in historical pipeline runs.
+  - It is particularly relevant for **parameterized pipelines**, where executions depend on variables like dates.
+
+- **Creating Backfills in Mage**
+  1. Select the pipeline and specify a date and time window for backfilling.
+  2. Set the interval for backfill runs.
+  3. Mage automatically creates runs for each date within the specified range, assigning the execution date variable to each run.
+---
+##### Deploying Mage on GCP with Terraform
+
+- **Deployment Steps**:
+  - **Prerequisites**:
+    - Terraform
+    - G-cloud CLI
+  - **Understanding Terraform's Role**: Terraform will be used to deploy an app with Google Cloud Run, create a backend database, and set up persistent storage on Google Cloud.
+  - **Configuring Google Cloud Permissions**:
+  1. Go to **IAM & Admin** in Google Cloud Dashboard.
+  2. Find the service account for Mage deployment.
+  3. For broad permissions, set the service account role to **Owner**.
+  4. For specific permissions, add:
+     - **Artifact Registry Reader**
+     - **Artifact Registry Writer**
+     - **Cloud Run Developer**
+     - **Cloud SQL Admin**
+     - **Service Account Token Creator**
+
+
+
+
+
+
+
+
+
+
+
+  - **Utilizing Mage Terraform Templates**: Use a Mage Terraform template and run `terraform apply` to deploy your Mage instance to the cloud.
+
+

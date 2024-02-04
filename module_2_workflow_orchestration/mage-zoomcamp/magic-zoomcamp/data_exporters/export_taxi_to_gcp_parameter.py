@@ -10,20 +10,19 @@ if 'data_exporter' not in globals():
 
 @data_exporter
 def export_data_to_google_cloud_storage(df: DataFrame, **kwargs) -> None:
-    """
-    Template for exporting data to a Google Cloud Storage bucket.
-    Specify your configuration settings in 'io_config.yaml'.
-
-    Docs: https://docs.mage.ai/design/data-loading#googlecloudstorage
-    """
+    # Gets key word argument "execution date"
+    now = kwargs.get('execution_date')
+    # Formats now to a string in the format year/month/day
+    now_fpath = now.strftime("%Y/%m/%d")
     config_path = path.join(get_repo_path(), 'io_config.yaml')
     config_profile = 'default'
-
     bucket_name = 'claytor-mage'
-    object_key = 'nyc_taxi_data.parquet'
-
+    # uses fstring to pass our now_fpath 
+    object_key = f'{now_fpath}/daily_trips.parquet'
+    # Its always a good idea to comment out the last block and check what happens with print first.
+    # print(object_key)
     GoogleCloudStorage.with_config(ConfigFileLoader(config_path, config_profile)).export(
-        df,
-        bucket_name,
-        object_key,
+       df,
+       bucket_name,
+       object_key,
     )
