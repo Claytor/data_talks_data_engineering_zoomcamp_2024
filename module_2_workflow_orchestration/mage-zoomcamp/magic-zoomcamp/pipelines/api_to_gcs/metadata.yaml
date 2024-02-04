@@ -63,7 +63,7 @@ blocks:
   language: python
   name: taxi_to _gcs_partitioned_parquet
   retry_config: null
-  status: updated
+  status: executed
   timeout: null
   type: data_exporter
   upstream_blocks:
@@ -90,7 +90,7 @@ settings:
 spark_config: {}
 tags: []
 type: python
-updated_at: '2024-02-04 00:59:05'
+updated_at: '2024-02-04 03:49:13'
 uuid: api_to_gcs
 variables_dir: /home/src/mage_data/magic-zoomcamp
 widgets: []

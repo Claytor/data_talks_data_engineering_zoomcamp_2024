@@ -214,7 +214,8 @@ to download the container in the exercise
   POSTGRES_HOST: "{{ env_var('POSTGRES_HOST') }}"
   POSTGRES_PORT: "{{ env_var('POSTGRES_PORT') }}"
 ```
-- Added a data loader to pipeline to test postgres connection.  Great success
+Added a data loader to pipeline to test postgres connection.  Great success
+
 ![Alt text](images/data_loader.png)
 
 #### **01/31/2024** - Slightly more advanced pipeline.
@@ -240,7 +241,7 @@ Watched videos
 
 #### **02/02/24** Configureing GCP with Mage
 
-***SIDE Quiest: I made a bash script to*** 
+**SIDE Quiest: I made a bash script to**
   - start vm
   - pass the IP to my config file
   - mount a remote directory on my local machine
@@ -299,7 +300,7 @@ VM is ready
     object_key = 'titanic_clean.csv'
     ``` 
 
-#### **02/03/2024** API to GCS
+#### **02/03/2024** - API to GCS
 
 - Created new pipeline `api_to_gcs`
 - Draged `load_api_data` loader that was previously completed into `api_to_gcs`
@@ -320,10 +321,47 @@ VM is ready
       import pyarrow.parquet as pq
       import os
       ```
-    - We need to tell pyarrow where our credentials are.  They are already set in Mage's config file, but we have to do it manually in this case.
+    - We need to tell pyarrow where our credentials are. this goes under the first `if` statement.  the credentials are already set in Mage's config file, but we have to add it manually in this case.
       go to the terminal and type 
       ```bash 
       ls -la
-      ```
-      to find our credentials
+      ``` 
+      to find our credentials (`/home/src/claytor-mage.json`)
 
+      ```bash
+        if 'data_exporter' not in globals():
+        from mage_ai.data_preparation.decorators import data_exporter
+
+        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "/home/src/claytor-mage.json"
+
+        bucket_name = 'claytor-mage'
+        project_id = 'claytor-mage'
+
+        table_name = 'nyc_taxi_data'
+
+        root_path = f'{bucket_name}/{table_name}'
+        @data_exporter
+        def export_data(data, *args, **kwargs):
+          # gives us the date as as string that pyarrow can use
+          data['tpep_pickup_date'] = data['tpep_pickup_datetime'].dt.date
+          # reads data into a pyarrow table with pandas
+          table = pa.Table.from_pandas(data)
+          # find google cloud storage object in pyarrow fs.
+          # Authroizes using environment variable automatically
+          gcs = pa.fs.GcsFileSystem()
+          # Use parquet write to data set method to dataset.  This requires three arguents
+          pq.write_to_dataset(
+          #first argument is "table" which is a pyarrow table
+          table,
+          # second argument is "root_path"
+          root_path=root_path,
+          # third argument is a list "partition_cols" where the columns to partion on are indicated
+          partition_cols = ['tpep_pickup_date'],
+          # The last argument is the file system, which is the gcs file system
+          filesystem=gcs
+          )
+          # This breaks our data up by date and writes to different parquet files. see results in bucket
+          # this is how larger datasets are managed.  Doesn't make sense to write a 2gb dataset into one file
+          # it would be really slow to read and write
+        ```
+        ![alt text](images/partioned_parquet_pipeline.png)
