@@ -1,3 +1,0 @@
-{"operation": "create", "resource": {"type": "pipeline", "uuid": "divine_portal"}, "timestamp": 1707065338, "user": null}
-{"operation": "create", "resource": {"type": "pipeline", "uuid": "gcp_to_bigquery_copy"}, "timestamp": 1707074224, "user": null}
-{"operation": "create", "resource": {"type": "pipeline", "uuid": "load_to_gcp_copy"}, "timestamp": 1707074569, "user": null}

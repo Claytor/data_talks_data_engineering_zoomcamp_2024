@@ -1,0 +1,2 @@
+# When working with cloned pipelines, You must not directly edit the blocks or it will mess up other pipelines  
+- `taxi_to_gcs_parquet` is going to be edited.  Therefore, we will place it's code into a new block and then delete `taxi_to_gcs_parquet`.
