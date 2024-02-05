@@ -136,7 +136,7 @@ spark_config: {}
 tags:
 - etl
 type: python
-updated_at: '2024-02-04 19:15:47'
+updated_at: '2024-02-05 16:02:03'
 uuid: load_to_gcp
 variables_dir: /home/src/mage_data/magic-zoomcamp
 widgets: []
