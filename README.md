@@ -425,21 +425,22 @@ def export_data_to_google_cloud_storage(df: DataFrame, **kwargs) -> None:
 ---
 ##### Deploying Mage on GCP with Terraform
 
-- **Deployment Steps**:
-  - **Prerequisites**:
-    - Terraform
-    - G-cloud CLI
-  - **Understanding Terraform's Role**: Terraform will be used to deploy an app with Google Cloud Run, create a backend database, and set up persistent storage on Google Cloud.
-  - **Configuring Google Cloud Permissions**:
-  1. Go to **IAM & Admin** in Google Cloud Dashboard.
-  2. Find the service account for Mage deployment.
-  3. For broad permissions, set the service account role to **Owner**.
-  4. For specific permissions, add:
-     - **Artifact Registry Reader**
-     - **Artifact Registry Writer**
-     - **Cloud Run Developer**
-     - **Cloud SQL Admin**
-     - **Service Account Token Creator**
+Terraform will be used to deploy an app with Google Cloud Run, create a backend database, and set up persistent storage on Google Cloud.
+
+- **Prerequisites**:
+  - Terraform
+  - G-cloud CLI
+- **Configure Google Cloud Permissions**:
+1. Go to **IAM & Admin** in Google Cloud Dashboard.
+2. Find the service account for Mage deployment.
+3. For broad permissions, set the service account role to **Owner**.
+4. For specific permissions, add:
+   - **Artifact Registry Reader**
+   - **Artifact Registry Writer**
+   - **Cloud Run Developer**
+   - **Cloud SQL Admin**
+   - **Service Account Token Creator**
+- Download Terraform Mage Templates `git@github.com:mage-ai/mage-ai-terraform-templates.git`
 
 
 
@@ -451,6 +452,7 @@ def export_data_to_google_cloud_storage(df: DataFrame, **kwargs) -> None:
 
 
 
-  - **Utilizing Mage Terraform Templates**: Use a Mage Terraform template and run `terraform apply` to deploy your Mage instance to the cloud.
+
+
 
 
