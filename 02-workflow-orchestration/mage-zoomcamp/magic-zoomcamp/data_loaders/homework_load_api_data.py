@@ -27,8 +27,7 @@ taxi_dtypes = {
 }
 
 # native date parsing (this lets pandas know you are parsing dates and it'll handle it automatically)
-parse_dates = ['lpep_pickup_datetime', 'lpep_dropoff_datetime']
-rename_columns   
+parse_dates = ['lpep_pickup_datetime', 'lpep_dropoff_datetime']   
 
 @data_loader
 # function to load urls for green taxi data in Q4 of 2020

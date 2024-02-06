@@ -92,7 +92,7 @@ spark_config: {}
 tags:
 - etl
 type: python
-updated_at: '2024-02-01T02:02:43+00:00'
+updated_at: '2024-02-06 01:45:01'
 uuid: load_to_postgres
 variables_dir: /home/src/mage_data/magic-zoomcamp
 widgets: []
