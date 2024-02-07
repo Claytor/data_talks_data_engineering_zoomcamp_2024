@@ -1,0 +1,742 @@
+so hi everyone thanks for joining us today and I'm going to share my screen
+right now with you so I assume that most of you came here because you are following the data
+engineering course if you're not following the data engineering course and you saw our announcement about this
+workshop on LinkedIn maybe in the newsletter don't worry you don't have to follow the the course to also learn from
+this Workshop um but I will quickly explain where all the information
+uh that you need for this Workshop is right so first of all uh all the
+content for our course is in this GitHub repo I will share the link uh in the in
+the description I will put all the links in the description don't worry about that now right now I will just show the
+structure and then I will share the links and you will find them under the video so this is our
+course and in the course we have many different topics and right now we are
+here we are talking about data inje and you can just click more details
+here and you will go directly to the file we're interested in so this is the
+file that Adrian will refer to I think but this is the kind of entry point to
+this Workshop um there are some links I just today added um a few links here
+with notebooks um but Adrian will explain as I I think as we go uh
+along and yeah so you will see everything you need here it's data
+engine zomom cohorts 2024 workshops TT but the way to go there is just scroll a
+little bit and click on more details and um I think that's all I
+wanted to talk about and just a few notes maybe like if you're not following the course you still it's okay for you
+to attend this Workshop you will learn a lot so you don't have to attend modules one and modules two to get most of this
+Workshop so we try to make it in such a way that it's both useful for both the students of the course and anyone who
+wants to learn about DT and right now I'm stopping sharing my screen and Adrian
+the floor is yours thank you and uh let me share as
+well
+somebody's asking will this session be recorded yes it will be recorded I already shared the link in the telegram
+Channel and you can just use the same link so the video will stay available
+using the same link as we use for streaming so just click on that link in telegram or elsewhere where you find it
+just click on that and you'll be able to see this Workshop can you make the font a bit larger
+please yes classic problem yeah it's better thank you all right so
+uh welcome to data ingestion with DT this course is uh not just about DLT
+it's uh mostly about data ingestion so it will teach you some things uh that you can do outside of DT as well um so
+what we'll learn in this uh Hands-On Workshop is uh how to extract data from apis or files uh in a way that is
+scalable we'll look at what normalizing this data means and why we do it uh and
+how we can do it and finally loading this data and then we will look at incremental loading uh we won't look at
+incremental extraction which is part of incremental loading but it's a bit more complex um but I will talk about uh it
+more when we get there so by the end of this Workshop you'll be able to write data pipelines like a senior data
+engineer quickly concisely scalable and self-maintaining and uh if you don't
+follow the course and just want to oh yeah uh that was your line Alex say it's
+too late now for this line because uh it's already happening right the workshop is created in a way
+that it's self readable right because uh for me to be able to do it uh I also
+need bullet points so you can also uh follow on your own in case you get lost
+uh so you'll find the navigation uh that you have the workshop
+content uh the workshop notebook that I will also show when we get there um um
+and finally at the end you'll want uh to go to the homework starter notebook uh
+so allow me to introduce myself uh my name is Adrien and I've
+worked in the data field since 2012 I've built many data warehouses and some data
+legs and a few data teams so 10 years into my career I started working on DLT
+or data load tool which is an open source library to enable data Engineers to build faster and better and I started
+working on DLT because the data engineering is one of the areas of software engineering where we actually
+don't have many developer tools um and building better pipelines would require
+more code reuse and we cannot all just build the perfect pipeline uh so DT was
+born to actually enable you to reuse quality code uh it's a library that automates the most tedious part of data
+uh ingestion so that's the loading the schema management data type detection scale ability selfhealing scalable
+extraction basically all the things that make your pipeline break and that make it hard to
+manage uh so uh dldt we try to make it as a One-Stop shop for data Engineers so
+you kind of have a full toolbox for what you need and due to its Simplicity it uh
+enables uh starters beginners basically to build pipelines uh 5 to 10 times
+faster than normal um that won't break basically that will scale and sell feel
+uh so let's get into the course uh I'm following this uh link here the workshop
+content in case you want to do the same I already have the notebook open for later I will Zoom it in
+now but um all right so um many of you have probably worked
+with uh files on ingestion so you've seen them in storage um and uh you know
+what what is data loading or data ingestion it's the process of extracting data from a producer transporting it to
+a convenient environment and preparing it for usage by normalizing and sometimes cleaning or adding metadata so
+usually when we're talking about uh files that are on storage they've already been put there they've already
+been extracted from a source and sometimes they've been already normalized sometimes not uh so you know
+basically files in storage twas actually mean kind of already loaded data or somewhere in between
+and if I may add so in the course we talk about Concepts like data Lake and data house right the data somehow ends
+in these places right and the process of data loading is actually putting this data there am I right Adan yes pretty
+much and uh you know sometimes the data lake is just a consequence let's say of loading to a data warehouse so people
+just use it for historization sometimes it's the main destination where people use data um so I'm going to to uh use the
+Pokemon expression while data set magically appears because it feels like many starting courses are starting with
+a file on storage uh I think this is also the um data science Zoom Camp Alex say
+so basically we want to be the people who will make those data sets magically appeared magically appear so sometimes
+the format in which these files appear is structured and with explicit schema like parquette files AO files or a table
+in DB or sometimes the format is weekly typed and without an explicit schema so for example CSV it's a file that other
+than the header only has data doesn't really have metadata or maybe that this
+is exactly like you mentioned this is exactly what we have in the course so we have a bunch of CC files with data about
+taxi trips but somebody put this data in a CSV right now it's parket it used to
+be CSV which we still use some put together this CSV file right it just didn't magically appear out of
+nowhere and this is exactly what the case here this is what we're talking about yes and um in the CA in the case
+of the course now you have parette files which you know I would consider that to be almost loaded data so you know it's
+in a data Lake it has a schema but uh when you're talking about CSV a CSV is
+not fully describing the data it's just a container for the data kind of so
+actually data loading often has adding this metadata layer so let's talk about
+how we could be this U magician uh like I was saying um it's about adding this
+metadata layer so for us um it sometimes means adding a schema to the data so
+what is a schema a schema is basically specifying the expected format and structure of the data within a document
+or data store defining the allowed Keys their data types and any constraints or relationships so to give you an idea in
+a CSV you might have a date time field but it's not clear that it's date time you can just tell by looking at it but a
+schema would make this explicit and it would say this is clearly a datetime field and it follows a particular
+format uh so we're here to learn about how to make these kinds of data sets
+available uh with the correct uh metadata as well so we will look into
+how can we extract this data so like get those CSV files how can we normalize
+clean and add metadata so how can we turn these CSV files for example into a
+um pet file or a database format and how can we do incremental loading so
+actually when we build pipelines sometimes we build full load pipelines but many times we don't want to grab the
+whole data history every day we just want to grab what happened in the meantime so this would be incremental
+loading it would be much faster and cheaper so what else does a data
+engineer do besides these things and what are we not learning in this course so a simplistic a simplistic as it seems
+actually the data engineer main goal is just to ensure that data is Flowing from a source to a destination uh there isn't
+really much rocket science around that but of course besides building pipelines running pipelines and fixing pipelines
+an engineer might also need to focus on optimizing data storage ensuring quality
+Integrity cost cost management sometimes or implementing effective data governance practices like contain uh
+continuously refining a data architecture to meet the uh reporting
+requirements um sometimes the data Engineers role will
+um also uh go to Strategic Management um or enhancement of the
+entire data life cycle so what I mean here is um it might even go into for example retention policy for private
+data or all kinds of crazy things around pipelining data um but this Workshop
+specifically focuses only on extracting data uh and building these pipelines in
+a robust and scalable way with governance uh so kind of with best practices um so you won't be getting
+much about orchestration or any of the other uh things um and also something
+that um will be worth learning on your own will be this uh incremental extraction that will allow to actually
+only pull the incremental data that you want but let's start first with extracting
+data and uh here I prepared also some examples um so let's look at the
+considerations of extracting data so most data is stored behind an API and
+sometimes this is a web API like a restful API from some
+business application like Salesforce um sometimes the API will return secure file path so for example
+some advertising apis have really high volume of data like ad Impressions and
+uh it wouldn't be reasonable to give you this data record by record to tell you you know for each impression uh so what
+they do is they return a file because a file can be read in bulk and it's much cheaper and faster for them to basically
+make this data available to use this way it's also more scalable for you to grab it and sometimes the API is something
+else so it could be like a mongod DB or a SQL DB so basically it might be completely different from a standard
+HTTP API so as an engineer you usually need to build pipelines that just work
+that pull data out of these sources and put it into a destination so here's kind of what you
+need to uh consider for extraction to make that happen smoothly and to prevent your pipelines from braking so first you
+need to worry about the hardware limits so during this course uh we will cover
+how to manage memory and what I mean here is for example um you might be
+grabbing a very large data source maybe it's 4 gabt maybe you only have 2 gbt of
+ram you will want to somehow pull this data and normalize it without running
+out of memory so we will look into how we can do that um then other limitations
+of getting data could be Network limits so sometimes networks can fail and generally we're powerless to fix those
+issues but what we can do is retry so we won't uh really go into any details here
+but you can find docs Links of how you could use uh retries on requesting the
+data and finally there could be Source API limits so each Source might have
+some limit of how many requests we can do per second like rate limitations uh this is usually dependent
+on the source uh and we won't cover this here since uh we can't really make a
+good example um so let's look how we can actually extract the data uh by managing
+memory uh with managing memory so what kind of limits could be hit on your
+machine when you're downloading data what could happen is that you run out of either Ram or disk space it's unlikely
+to run out of dis space so for cases like these I would say it could happen on some kinds of uh cloud uh
+infrastructures but usually these Cloud infrastructures will allow you to write to a bucket to mitigate that so really
+your main concern is not running out of ram because if you run out of ram um bad
+things will happen so let me explain a little bit um usually you would use an
+orchestrator to run your pipelines and many of these uh um pipelines might be
+running on a shared worker so an orchestrator might run for example four pipel on a single machine and if your
+memory runs out due to one of these pipelines it's going to crash your entire machine so it's not just going to
+crash your uh current pipeline it's going to crash everything else so this is why we usually really
+try to avoid running out of memory uh it's the same is true with disk um in most cases your dis is
+sufficient but it can happen to run out um so for those cases you could just
+mount an external drive uh which should basically be a bucket so how do we actually avoid
+filling the memory uh since we often do not know how much volume the data how
+much volume we have in the data up front and we cannot use that information to
+scale and we also cannot just um infinitely scale dynamically like on the
+Fly the answer is we need to control the maximum memory so we do that by
+streaming the data the way you could think about it is if we have a giant file we can't grab it all at once but we
+could grab it line by line we could call this streaming so streaming here refers to the process uh refers to processing
+the data event or event uh event by event or chunk by chunk instead of doing B
+operations so let's look at some classic examples of uh streaming uh where the
+data transferred this CH is transferred chunk by chunk or event by event so an
+example could be outside of the data field between an audio broadcaster and an in browser audio player so for
+example you might have a radio station and you might be listening to it in your browser the uh data gets to your browser
+through a streaming process between a server and a local video player so for
+example on YouTube when you're watching a video um a little bit of the data is
+sent you can already start watching the video and then the rest of the data is sent while you're already watching uh
+between a smartph home device or iot device and your phone so any kind of
+sensors for example would create some kind of stream of uh data um and you
+need to collect it somewhere between Google Maps and your navigation app for example so this is
+also an interesting example because in fact you get the map and data in the streaming uh fashion you basically don't
+get all the information at once but uh you might get a new route or something like that based on where you are um also
+for example between Instagram live and your followers uh could be uh streaming
+so what actually do data Engineers do to stream data we usually stream data between
+buffers such as from an API where data is available to a local file which is
+basically a buffer or from web hooks uh or event cues into some kind of storage
+so for example uh taxi rides maybe at the end of each taxi ride and event is
+emitted and we can capture it and uh write these uh taxi ride files or from
+an event queue like Kafka or sqs uh to a bucket so this is a classic uh event
+tracking case so how can we do streaming in Python through
+generators um let's look at how we can build most data pipelines so basically when we uh process data in a stream in
+Python we would be using generators which are functions that can return multiple times so by allowing multiple
+Returns the data can be released as it's produced as a stream instead of returning it all at once in a badge so
+we could take this uh theoretical example let's say we have a Twitter search and we look for cat pictures and
+we don't know how many C cat pictures we're going to get we might get 10 or we might get 10 million are they going to
+fit in the memory we don't know that uh so to grab this data without running out of memory we would uh create a python
+generator and this generator would be able to give us an image and uh then we
+could do something with this image to not have it stored in memory anymore and then we could ask for the next image so
+here's an example of a generator uh we can look at a function so let's say we have a search Twitter function and we
+are running a query and we're saying for each row in our query so for each result
+uh let's append it to our data list and if we do this we're basically filling
+the memory with our data so this is just a normal function it's returning all the data at once this is no
+good so if we want to actually see a picture we would have to run this
+function all the data would need to be downloaded and then we could see the first row of data so let's look how this
+could be written as a generator uh this is what the generator looks like as you can see it's a little
+uh shorter so basically now we don't have uh data uh
+list but we're yielding every result as we get it so this means that we're
+actually returning multiple rows here and when we want to execute this uh um
+generator we can basically start running it right away so what I mean is that the
+first row that will be printed here will be printed as soon as the first result
+is ready so we don't need to fill the memory or wait for all the cut pictures before we can see the first one
+one um so if we actually wanted to turn this
+generator kind of into a list of data we could just wrap it into a list and say
+um my data is this uh list and this would basically run the generator and
+populate the list of data so let's do some practical examples now uh so in the
+first example we'll be grabbing data from an API and um we will go to the notebook uh after I talk about it a
+little bit to actually run it and understand how it works uh so this is the bread of and butter of data
+engineering so please uh pay attention and also run it in the notebook so for this example we created
+an API that can serve the data you are already familiar with the New York TXI data set and the API documentation is as
+follows there are limited number of records behind the API so we won't have
+any kind of crazy uh surprises are having to wait too long uh the data can be requested Page by page which is a
+normal uh way to request data from an API uh it's basically streaming uh micro
+batches so each page will contain a thousand records and if we request a
+page with no data we will get a successful response with no data so this is our signal to stop uh requesting
+Pages um so we will be using a get method um using the request Library we
+will hit this URL over here and we will have the page parameter in our
+request uh so how do we design our requester like I was saying we need to
+get the request Page by Page until there is no more data we will yield each page
+as it comes um and once we have a page with no data we will
+stop so uh this is how this uh uh code would look will go to The Notebook book
+soon to run it and the advantage of this memory is that uh of this uh method of
+getting data is that we have easy memory management because um the API is
+returning pages so it's easy for us to just yield these pages and uh we don't need to break down things any further uh
+the cons are low throughput so you'll see actually that uh this transfer is a bit slow because all the data has to go
+through this API so let's go to The Notebook and you have here uh the first cells you
+can run them to install dld maybe can you show quickly how to find this
+notebook cuz um I think this is interesting and there is no link so we
+need to go yeah one level up to the DLT
+file so this is the file that I showed at the very beginning of this and we have the the workshop notebook book
+which is just a notebook that we have in the repo it's not a Google Drive it's
+not um collab notebook but I think uh this is like the if in resources you
+have uh already in collap if you scroll AIT little bit down yeah so this is what you put course Club I think this is the
+the notebook right so this is how you can find it yes this is it it's the same yeah so
+this is how you find so if you want to just get the jupyter notebook and do it on your machine you use the first link
+if you want to execute it on collab which for those who don't know it's a cloud environment for executing Jupiter
+notebooks this is how you do it yes so the advantage of collab is that you
+don't really need to set up anything um and you can just go and run it this is called the magic here so it basically
+just allows us to run C before people start executing it
+there's a question do we need need to make a copy of this collab notebook or it uh when somebody opens the
+link I think you can't uh change it MH
+so you can so basically if you are in sandbox
+mode uh playground mode if you see this
+Banner on top you don't need to do anything if you don't see this Banner you can basically just open put it in
+sandbox mode or make a copy uh sandbox mode means that your changes won't be saved so this it
+enables you to just run it and do things uh without having to have
+permissions and uh when I interrupted you you were installing DB DLT like did
+you already talk about DT what is it what is it that we're installing so I
+talked about it a little bit I guess um you know it's a loading
+Library it's the first of its kind it's basically a tool made for developers to
+help them load data um much faster so myself uh I was a data engineer and I
+felt the need for this tool because we didn't have actually anything that allows us to easily build pipelines so
+for example we have tools like airb uh they are kind of like they come with
+pre-build sources and you can easily in the UI build some things using their
+um uh building blocks for example but if you really want to build a custom pipeline that uh can do anything you
+need to go to code and this is actually where most of us uh end up eventually
+because um there are many different apis with different uh let's say ways to get
+through them and uh it's very hard to actually create a generic solution that
+works for everything uh so dldt by being a library gives you the option to do
+whatever you want in a custom way and then hand that over to dldt so the advantage to you actually is
+that um dldt has a schema inference and evolution engine so it will look at the
+data that you're passing to it and automatically normalize it uh and load it for you um so you'll see it basically
+makes this loading part very easy and there is a question I don't know if it's
+the right moment to ask this question we can postpone it up to you the question is if DT is an alternative to Mage or
+any other workflow orchestration tool or it's something that yeah D is not a workflow
+orchestration tool it's a pipeline building tool um so specifically how does that fit with Mage Mage is an
+orchestrator that is using uh sources from um basically a framework that's
+called singer uh that was created for software Engineers so what that means is
+that if if you want to maintain the sources that you're running with uh Mage
+U that might be a bit unpleasant but you could also run just DT pipelines on Mage
+and then you would have you would benefit from both basically so the the
+if I can rephrase and summarize your question answer is that we use a workflow extrator such as Mage to run
+DLT so let's say we have a crown job that we want to execute hourly
+right and we want to use DLT for talking to some API and loading data to our data
+vhouse and then we would just invoke it from M exactly so dldt is actually the
+first uh data loading tool that was made to fit in existing orchestrators almost all the previous tools uh kind of either
+need to be patched into an orchestrator in a funny way or um live outside of the orchestrator
+completely all right uh shall we get uh into the
+extraction all right so uh let's uh so I already prepared the code here for the
+first generator and as you can see I was telling you we have a new a URL we're
+making a request with a page number and this is how we handle the pagination so we start from page number one and as
+long as we have data we will just keep getting pages so if we have data we'll
+yield the data and we'll uh increase the page number for the next request if we
+don't have data we stop the loop uh so this means that basically we will start from page one and as we get data yield
+the um data and if there's no more we'll just stop so we can just run this now
+see how it would look and we also close table of contents it kind of takes too much
+space thank
+so what's happening so right now we're talking to the API and it responds with something right yes so basically we're
+sending uh this request to an API and we're increasing the page number with uh
+each page and as you can see here um it got the first page with 1,000 records
+and it printed these 1,000 records so it's actually like a lot of data here don't scroll too far um until finally we
+got to page number 11 which had zero records so we just stopped uh trying to
+grab any more data and this is data with taxi trips so this is the same data we use for the course but also if you're
+not taking the course it's the data with uh start end of a taxi trip and then
+some other information this is like Uber or whatever exactly you'll see it in a
+bit more detail soon when we load it right now as you can see it just looks like uh
+Json kind of or like uh document and uh for example if you look at the
+time here there's nothing to say that this is uh um ISO time stamp right it's
+just a string in this case um anyway let's go back to the course and
+continue uh so this is kind of like an example of a very classic API it will
+return pages and if you just yield these Pages you can do something with them you can process them incrementally you can
+load them so let's look at the second example now which is uh grabbing data
+from the same file but this time we just have a simple file download so there's no more API the advantage uh of getting
+data this way uh you know I would say don't do it this way but I'm showing it
+to you anyway um so you can remember that this is not the best practice um you don't have to follow
+along in this part so I would uh so I will start telling you about it uh some apis basically respond with files
+instead of pages of data and uh they do this because it's much cheaper to just
+give you a file link than to give you a page of data uh because you know when
+they give you a page they need to actually read the data uh put it in a different format
+so basically um the better way for uh some uh apps
+with a lot of data to offer you this is through files and if we just download this file as we normally would um the
+big Advantage is that we have high throughput because the file download is fast but the con is that uh we would be
+using memory to hold the data from the file so this would uh pose a problem if we have a small memory and a big file so
+this is what the code would look like uh like I said you don't need to run this code it's just a simple file download So
+as you can see we have the Json L file here um and this is just a generic
+downloader uh we get the data we split it because Json L is basically lines of Json that we can split and then we can
+uh return this data so clearly this is bad um basically in the response we will
+have uh all the data uh in this structure we will have all the data again so if we have four gigs uh we'll
+have eight in memory if we have four gigs in the file uh so don't do this uh
+like I said but if you're going to run this code and you're going to print this uh data you're going to see that it
+takes quite a while before we get the first rows because the entire file needs to be
+downloaded so now let's look at the best practice way to download the same file um I would say for this one Let's uh go
+to the notebook afterwards and follow along so here it's the same file but we
+do a streaming download and the advantage is that we keep the High throughput um now we also have memory
+management if we do it in a row by Row Way in a streaming way uh the disadvantage of doing it this
+way with files is that for column nor formats it's not easy to do so what I
+mean is that if we have a file that stores the data in rows we can split
+this file into rows and we can start processing the rows incrementally but if the file is storing the data in columns
+then and actually these columns are stored in blocks so we would need to request blocks of data until we have a
+complete uh row and then we would be able to get the first row out and then we would need to keep requesting blocks
+and processing them um so for this um uh
+Workshop we just have a Json L file so the easy way um if you need to do the
+hard way you can definitely find ways to do it online um but basically this is the same
+file that we're downloading and this time we are downloading it with stream equals through so this means that um
+when we are reading this uh response um the data doesn't have to be all there
+already so we can start reading from it before the file has been downloaded so we can basically just uh iterate through
+the response and uh if there is a complete line downloaded then we can
+yield it so um basically yeah we would just be running
+a simple method and let's move on to the notebook to see what this looks like so this is
+the bad way and I will run it anyway just to uh show you it took some
+time um there will be a time
+print okay so it took a couple of seconds to print the uh first piece of
+data and let's run the third example which is um okay that was fast so basically in
+this example we're getting the first rows of data and already printing them and as you can see it took U uh
+0.08 seconds uh so like uh less 9% of a second right to uh get this data versus
+uh two seconds above so you can clearly see that there is
+um um streaming happening under the hood and that the first records are available to us immediately but the distinction
+here is that uh like maybe if we execute the entire think end to end maybe for
+the second one the time will even be more right than for the first one
+but the speed uh like how quickly we process the first line and how much
+memory we use doing that is way different so it's way faster and way
+lower memory it's it's not even about speed right it's about uh overall it's about scalability because if suddenly
+our file is really really big and our worker stays constant uh then at some
+point we'll run out of memory so while this approach might be marginally a
+little little bit slower because uh we have a bit more function calls and we're
+working over chunks instead of working over one big chunk um it will work
+whereas the other one might just break right so as a data engineer your responsibility is to deliver data every
+day correctly so it's better if your data is uh uh 1% slower in uh download
+than if it breaks every now and then all right so let's do a short parth
+pareses here and load uh some of the generators from above uh so what I did
+here I just uh so we won't spend a lot of time looking at this it's uh just a
+quick run so basically I'm importing DLT I'm creating a pipeline which is uh just
+a connection to a destination and then I'm giving these um uh generators to DLT
+to run them and to extract them and the reason why I'm showing you right now is because we were on the topic of
+streaming and what is important to know here is that dldt will uh respect this
+streaming so if you pass it U generator it will take out the first uh data that
+comes out of it it will start working with it and um before requesting the
+next item and um basically DT will uh
+create something we call extract packages that we can change change the size of so if we have uh really little
+memory we could say we want every 1,000 rows to write to disk and this way uh we
+wouldn't be running out of memory the default setting on dld is actually quite
+uh low so you probably won't run out of memory unless you're running on some really really tiny raspberry from 5
+years ago or something um maybe we should talk a little bit about dug DB so this is where
+we right right yeah so in the course we don't cover that so in the
+course uh what we do in the week one we cover
+postgress and uh maybe Adrian you can say a few words what are the main differences between these two and I in
+the meantime will run a poll it's I'm quite curious to know how many of you know DB so I'll just quickly run a poll
+um you you just say have you
+sorry so I'm going to talk about what happened here how the data made it into dub what dcdb is and why we like D Duck
+DB uh so basically as you can see I put this generator to go into a table name
+called HTTP download and I put this other generator to go into another table name called stream download and now we
+have now we run this against docdb and we can see the tables here and we can
+see the data in the table so what is docdb docdb is an inmemory
+analytical database uh you might have heard before of a database called SQL
+light uh it's also an inmemory database uh SQL light is uh probably on every
+mobile device by now right it's uh because it's an in memory database you can do a lot of uh embedded applications
+with it really cool things uh du DB is similar which means that you can basically just run it in process so so
+use it in your pipelines it's not an actual persistent database like uh uh
+postgress in a way it's more like uh you can spin it up in the process and refer
+to some files um and you have a functioning database so what is actually happening when we're loading data to
+database uh to dctb is we're creating some files underneath of data and then
+docdb is just in the python process able to read this data so um
+basically this means we can use it in Notebook and this is part of the reason why DT Hub really likes DB um basically
+like I was telling you DT is a library that it can run almost anywhere so
+um duck DB is also a library that can run almost anywhere so because DLT needs
+to load data to a database and duck DB is available anywhere uh we can easily
+showcase VT right so we have quite a few few let's say notebook demos uh where we
+run it we also have um uh some setups where we do some small calculations uh
+with du DB we don't use it for anything big but in theory you could do something
+with DLT load the data to ddb and then read it from there um and send it
+forward to a different database so for example here we're reading the data that we just loaded we could actually
+transform this data or summarize it and and uh put it in a new pipeline for example to some other
+database and I just see the results of the poll so
+64% of people who vot it do not know have not heard about ddb so you can
+think about ddb as a kind of well I don't know I don't want
+to say as a data house but for our course you can think like you can write data to Big query which we cover this
+week or some data Lake um like a bunch of files on um Google Cloud Storage or S3
+so you can think about ddb as a a different way right as an alternative
+that you run locally you can also think about it as development mode so a very normal way for us is that we do pipeline
+development on DB and iterate on it quickly because it's right here in front of me I can just use it anywhere and
+then when I'm ready to go to production just switch from DB to Big query light is used right yeah exactly
+um and with DLT you don't need to care about the database uh it's basically
+database agnostic so if it runs on DB it's going to do the same thing on bigquery um so this is why we use it as
+development mode the usual flow would be let's say I'm developing something with
+DT so I work on things locally and they use ddb for testing and let's say I
+write some integration test whatever with duck DB right but then when I go to production I just say instead of writing
+to Du DB I write to Big query and that's the only thing I change right by like
+all the code I write stays the same the only thing I replace is the destination
+exactly like we even use ddb on GitHub to test our pipelines right on CI
+runs okay uh let's continue with the next part which is normalizing data uh
+this one is uh quite demonstrative like we need to understand some Concepts that are happening there um so you often hear
+about um people spending lots of time cleaning data now what does this actually mean uh
+if we look into it granularly we'll see that it's usually two parts one of them
+is normalizing data without changing its meaning um and another is filtering for
+example taking out outliers when you're building a model and uh they might actually disturb something uh but this
+changes the meaning of the data slightly so part of what we often call data cleaning is just metadata work so what
+we usually doing is adding types so we're turning strings into numbers strings into time stamps sometimes we're
+renaming columns um because um SQL databases have kind of like a standard
+naming convention and you can't just put anything uh sometimes we flatten Nest dictionaries so uh when you have uh
+dictionary in a dictionary we try to bring it to the same level so you don't have multiple data structures and it's
+easy to access sometimes we unest lists or arrays into child tables so basically
+just like you can have a dictionary nested into a dictionary you could have an array nested into a dictionary and
+unfortunately an array cannot be flattened because it actually represents multiple data items at a varying amount
+uh so it's actually a separate data structure uh that we need to break out if we want to uh keep it as a
+table so we will look at a practical example next as these Concepts can actually be quite difficult to visualize
+from text so why actually do we prepare data why don't we just use the Json as
+is so for example many database engines support just throwing some Json in there
+or we could turn everything into string and just uh put it into a text field so
+why don't we do that so the problem with just using Json is Json is really a
+transfer format so it doesn't describe the data much uh we don't actually know what the Json document contains until we
+scan it uh types are not enforced between rows of Json so for example we
+could have a record with age 25 or we could have a record with age 25 or
+another one with AG 25 one could be an integer one could be a decimal and one could be a
+string um or in some systems you might actually have a diary for a single record but a list of dicks for multiple
+records so an example of this uh is the Discord API where if it's uh sending you
+a single message it will send you a row of data but if it's sending you multiple messages it's going to send you a list
+of rows which is a different data type uh so this kind of uh thing can easily
+lead to a applications breaking Downstream so um also when uh we want to
+use Json data we cannot use it easily we generally have to typ cast it so we
+would have to convert all these Tim stamps and say what their format is it's very
+tedious um reading Json also loads a lot more data into the memory because the whole document is scanned so when you
+have a really large document if this document was parquette and you were reading a column you would be able to
+just scan that column into memory but with uh data like Json or CSV um you
+couldn't do that You' need to um basically scan the entire row and then
+you'd be able to get your value so uh this has implications uh
+regarding memory usage but also cost um so reading
+Json okay I've already said this so Json is not fast to aggregate uh simply
+because it has has to be parsed up front before we can do anything with it it's also not not fast to search for the same
+reason basically Json doesn't have anything uh a modern database might have
+and it's a lowest common denominator format for interchange it's not really suitable for direct analytical
+usage so I'm giving here a practical example uh where I made some changes to
+the New York Taxi data to include some of these more complex structures so what
+I did was I added nested dictionary so a nested dictionary is basically a dictionary within another
+dictionary we added nested lists so nested list is basically a list that
+contains more elements it could be rows or it could be uh just
+values uh we also added a record hash because we'll use this later for incremental
+loading um so this is what our final record looks like and as you can see
+this is kind of like what you'd expect a normal Json coming out of an API to look like it's pretty nasty if you want to
+use it you can use it but you'd need to figure out how to get all your Fields flattened and the places where you have
+these lists you'd need to kind of create new tables for them um so introducing DLT DLT will
+accelerate data normalization massively because it basically automates it so we created dldt with a purpose of of
+assisting data Engineers to build simpler faster more robust pipelines with minimal effort one of the problems
+that you typically have when you're building an API data pipeline is that the response is not documented so
+actually you'll spend a lot of time sifting through Json like these and trying to understand what to do with
+them so DT completely removes that effort because it will infer the schema from the Json documents and do it for
+you so you can think of dldt as a loading tool that implements the best practices of data pipeline enabling you
+to just use those best practices in your own pipelines in a declarative way it enables you to stop Reinventing
+the flat tire and leverage the LT to build pipelines much faster than if we did everything from scratch and what I
+mean here about the flat tire is that frankly there are you know um a limited number of business applications and
+people build the same pipelines over and over and uh have the same problems over and over so it would be nice to not have
+the same problems again um so DT automates much of this STS work
+and it does it in a way that is robust it will do schema inference and evolution it will alert changes to the
+schemas so if you have new columns or if a data type changes you can alert that
+and you can use the schemas as data contracts so for example if you're ingesting events and you decide that you
+only want to accept events with a specific format you could say that and it would reject uh anything in a
+different format um DT will type uh your data it will flatten structures rename
+columns to fit databases so it just automates everything to load the
+data um it will process uh the streams of events or Pages without filling the
+memory and it can basically handle a variety of DBS or file formats so let's
+use it to load this nested Json to do DB and um let's go to The
+Notebook oh I already started running it so this
+is the um Json that we have as you can see it looks pretty bad we have a
+pipeline here to load the the to TB to the TXI RS data set and we've run the
+pipeline here it uh did a load and let's look what the data
+structure looks like so something that uh is a bit uh difficult to illustrate
+is basically that there is a relationship between these tables now so uh we will have a passenger table
+because uh this is how the data is represented in the input we will have a stops Table and there will be a
+relationship between the passengers the stops and the top level data so here we have a little um duck DB
+reading script that basically shows shows us what tables we have um then it
+will show us the rides table then it will show us the passengers and the stops tables and finally this is showing
+how we could join the data back together if we wanted to have it as a single data set so as you can see there is a a
+parent column and a record hash created that we can use to rebuild the data
+structure so you can see here the rights table in our case we just had one row of
+data so you can see everything now is properly typed we have the passengers table which basically just has the name
+and the rating and the rest are backbone columns and as you can see this DT
+parent ID will refer to this DLT ID here
+uh so you can basically just join the data back and it's the same is true for the stops table you have your helper
+columns you have your latitude and longitude and this is what the join data would look like of course this is the
+cartisian product of the three tables so this is why you have four rows um yeah so basically you can see
+let's look at what happened to the nest dictionaries and you can see somewhere
+these columns with two underscores and if we look in our input data structure for
+coordinates um so you can see basically this uh was flattened into the parent
+structure so longitude from the start of the trip
+from the coordinates will have become coordinates start long so this makes it easier to use data
+later all right I think that was uh it for the for this part and now we have um
+really short part oh if you are following the course from GitHub you
+will know that there is a CLI command you can run I won't run it now since I'm not
+prepared for it but if you run this it will open a streamlit app that will show you the tables that were
+loaded um so let's move on to incremental loading this section is quite short um
+so incremental loading is the act of only uh loading new data so this means
+that as we update our data sets with new data we would only load the new data as opposed to making a full copy but
+sometimes we might be replacing some of the destination data so if the data was upad was updated for
+example so by loading incrementally we are making our pipelines rather faster
+and cheaper um and unfortunately this also introduces some complexity Nothing
+is for free so incremental loading goes hand in hand with incremental extraction and State uh two concepts in which we
+will not dive right now but you should definitely check it out after the workshop so state is basically the
+information that keeps track of what was loaded so when we have an incremental pipeline We have basically some kind of
+checkpoint uh from where we need to continue so state is basically keeping track of this checkpoint to ensure that
+once you're starting again and want to load the next increment you know where to start um and as for so this checkpoint
+actually could be stored in multiple ways it could be for example last updated date it could just be an ID that
+was incremented it could be many ways and uh finally there's also
+incremental extraction uh this concept is about using the state so your
+checkpoint so let's say you know that your last loaded value was 3 days ago
+and you could send this value to your Source extractor to only request data from 3 days ago so you're both only
+extracting the data that you need than only loading the data that you need and you can uh learn more about the
+incremental extraction uh on the DLT docs I understand correctly let's say if
+we talk about the example with a file so let's say there's a file and every time
+we request the files with the rights for today there are new rights CU like the
+day goes by right and then during the day maybe there are new rights appearing
+right and what we want to do is like like maybe each hour look at this file and only process things that were added
+since the last run right exactly the file is large so there is no way for us
+to say easily okay we already processed this we haven't so we would need to write a lot
+of logic right yes it's also a cost thing right because if for let's say
+you're incrementing your pipeline every 5 minutes it's a typical uh pattern for streaming pipelines right you might have
+a stre stream with a buffer and then you take micro batches from it and if you were to scan your destination table
+every time You' generate a ton of cost I've actually done that uh by accident in a previous uh project and I managed
+to generate about €2,000 worth of cost to copy one my SQL table into big
+query it was a big mistake set set cost alerts
+alerts so there's a question so DLT is a way is a tool for paring Json and
+putting it into a data warehouse this is one of the things that
+it's really good at doing yes um I would call it a One-Stop shop
+for data Engineers looking to load data so while this is the core of what it does uh it has way more around it um so
+let's look at uh how we can incrementally load data because you were mentioning Alex say about the appens and
+uh I was talking about updating data which we call a merge uh type of loading
+so the way you can think about loading data is first of all can we extract this
+data incrementally because if we can't extract this data incrementally then it doesn't really make sense to talk about
+incremental loading um because you know then we could most of the time is spent on extraction anyway not on actual
+loading right so uh what we really want uh to make sure is that we can extract
+the data incrementally and what this means is we need to know either what is new or what
+changed uh so this depends on the source if the source would tell us and depending on whether the source is
+immutable or whether it's subject to change we might have to use a different strategy so what does immutable mean uh
+for uh so you were talking about taxi rides and we could say taxi rides don't change like once the ride has happened
+it has happened nothing can change about it anymore this would be immutable data it's event data for example and this
+kind of data we would just append so is it stateful data no it's events so we
+would just use a pend right disposition so we would just keep track of what was loaded and get everything from that
+point but if the data was stateful so for example let's say we are loading
+some information about the car and the car might get damaged or the car might be out of order or the car might be in
+maintenance or I don't know uh then the car has a state and uh basically from
+one day to the next the car could become unavailable so in our case uh we are
+giving an example where the car the event doesn't have a state but the
+rating of the Riders does so we will look into how to change that uh so basically if your data is subject to
+change uh then you cannot just append it you need to update the data at the destination so this means either you
+have a way to request data incrementally and if you do you can do an incremental
+loading Pipeline and you will use the merge disposition or you cannot request
+it incrementally in which case you're just going to replace everything because you don't have a better
+option so um the merge operation is actually the way it works is it uh us
+uses an ID to identify uh single record and then it will replace any records it
+has in the new data sorry it will replace any destination records with the
+records it has in the new data so um we will do an example together with the
+piece of data that we were looking at earlier and um what happened here was um
+it looks like the payment status got changed from book to can canell and um
+maybe Jack uh the passenger likes to fraud taxis we're not entirely sure but his rating also went down so uh this
+merge operation replaces an old record with a new one based on a key this is why we added the record hash
+earlier uh so we will use the record hash to identify the record so this way
+we can um basically the SQL database will know it's uh the same uh record
+that needs to be replaced so like I was saying a merge operation doesn't actually update the
+roles it actually just replaces them um so this is the reason why we're not updating is because updating would be a
+columnar operation and we're using analytical databases uh sorry uh updating would be a row based operation
+and we're using columnar databases for which this would be very slow so instead of updating the uh rows we will be
+replacing them so like I was saying in this example a couple of things things have
+changed so basically this rating here and this datas and uh I will switch over
+to the not notebook to run this example and uh discuss how the data was
+updated [Music]
+um I'm not sure where I had it okay sorry this was
+actually did I already WR this I'm not sure okay no I didn't already run this
+so now we updated the data and I'll show you basically what is the
+difference from above
+so
+uh I was supposed to do a merge here now we've done a merge so this was actually
+sorry I had a mistake in the course but you have to say write disposition merge on the primary key record hash and what
+this will do basically it will replace any records with the same record hash with whatever we have in here and as you
+could see from before um we have our data here so we
+have the payment status booked and we have the ratings
+somewhere here we have the passenger rating 4.9 and 3.9 and if we look at the
+updated data we have 4.4 and 3.6 for ratings and we have
+the payment status booked I think I made a
+mistake okay there we go now the payment status will be
+cancelled as you can see and and basically this updated your data so this
+is what we have prepared for this course we kept this course quite simple to uh
+cater to everyone and uh to make sure that everyone can complete it but you can find here some bonus Snippets if
+you'd like to check them out um this is an example of how you can load the same data to a parquette file so um here
+we're using uh FS spec it's uh basically a file system spec that allows you to
+use local folders or a bucket or I think Google Drive also supports it um to
+write files um here is an example of how you would load to Big query so basically
+like I was telling you I'm just changing out my destination uh when I'm developing so in this case uh you know
+we'd have to install the right library and authenticate to Big query and then
+we'd be able to uh load this table so before this score course I was running it and uh printing the data back as you
+can see there is a built-in SQL client in uh DT so basically regardless of what
+type of database you're using uh you can just use this client to get some data out so it's really great for
+development what else um yes and you can find other Demos in this repository and
+on our blog um both uh DT users and uh
+our working students create demos here uh so you can check them out and uh this
+is U uh finally this is the documentation piece that uh will give you an overview a little bit of the dldt
+capabilities so if we if you want to learn something more advanced uh I suggest starting here and just looking
+at what you can do um there's a GPT dos helper button on the docs so don't miss
+that it will answer most of your simple questions and if you get stuck you can just join our community and uh ask
+questions there guess you finished thanks I
+finished it I prefer to have it a little shorter and have time for questions and
+I also yeah we have a lot of questions um well um so when you showed um now the
+the example with incremental loading um so there is a question if um
+how different incremental loading for from CDC CDC is change data capture
+what's the differ between these two um I would say it's similar but different uh
+so in CDC data capture you're basically getting a stream of updates uh from uh
+the source database and then you need to have some kind of system by which you parse these updates out of there and
+then you can apply them to your tables um so I would say fundament M Mally it's
+the same you have a data source you have a destination but you have additionally some kind of mechanism to transform this
+stream into tables um so we're actually looking into adding that for uh SQL databases right
+but uh it's not about the tool it's about the source and destination
+process and uh another question also is about this example but more like about
+the specifics of the example how is the record hash calculated um is it different every time
+you update the record or is more like a unique identifier so in this case I created it um by hand right but
+depending on um what your data source is you will typically have some kind of
+identifier if you don't have an identifier you can basically create some kind of uh hash out of your row um if
+you have to update your row so you you cannot use your row to create an identifier then you're screwed pretty
+much so I guess like you have a record and you know which fields in the record are not going to change most likely and
+which are going to change so you can base the hash on the records that do not change you know next update they will
+stay the same maybe it like you need to think how to make it unique but that's one of the possible options exactly
+basically the way you can think about it is you need an identif and that identifier could be created out of some
+columns then there is a question about um other tools for parsing Json so that
+there was a discussion in live chat and later sadly we will not have access to
+the live chat it will be lost so maybe this is something we can talk about too so there is a question in the live chat
+like are there alternatives for DT for parsing Nest Jason and somebody mentioned pandas but then there is a
+discussion like okay Pand do not really do this exploding meaning like when you have at least inside of a
+dictionary uh like doesn't create an extra table that you can link
+yes yes uh so you know when we built this tool we looked at everything that was out there um I would say pandas uh
+is the closest thing um there is nothing else that is just good and open source
+and uh you know just runs so this is part of the reason why we built it mhm
+cuz with pandas uh if I remember correctly what it's doing is when you parse it for
+nested things you still have a dictionary and for nested list you'll have a list and then you need to kind of
+parse it again have some Logic for creating like another data frame an
+extra yes you could do this and you need to make sure that you're pushing some kind of record key from the parent
+record into the child table right so you still have can you know recompose the data um the
+problem is you know you can do it as a simple oneoff but uh we're loading pipelines you know with dozens and
+hundreds of tables and uh I don't think it's reasonable to um use pandas here
+also pandas loads everything in memory so it would break the streaming
+concept okay there questions I took some note uh I think we mentioned so what if
+an API has restrictions to let's say producing only 100 records at a time or
+having some rate limits uh I assume DLT handles these cases too right DLT has um
+built-in request library that you can use I'm not sure if we're using it in this
+uh no I didn't want to introduce the complexity here but
+um you have it um here for example um so basically this is
+a dropin replacement for the request library and if you use this uh what it has extra is
+retries um so there when you're making um HTTP calls some of them are retryable
+so for example there could be a server error or there could be a network traffic issue or it could be that
+temporarily you're not allowed to grab the data because of a rate limit uh so
+what uh this uh request replacement will do is it will have some kind of
+incremental back off to retry uh by default so if it cannot get the data now
+it will try again after half a second if it still doesn't uh if it still can't
+grab it it will try again after two seconds and U usually it can eventually just get it and
+resume but uh you know it depends very much on The Source API so you might need to do some you know uh private
+management of how this
+works I am muted but as we speak I am adding I'm making changes to this DLT
+markdown file so if um if I may I want to share the screen because
+um we also have a homework for that so you will see this is the document we
+shared at the very beginning and the workshop content was here so this is what Adrian was showing um all the time
+uh but then if you scroll down you have the homework section so this is where you can uh after watching the video you
+can try to implement something yourself to make sure you understood the concepts so there are four questions and then
+this is the link where you can submit it I just edit it right now so like as
+usual with other homeworks uh you will see this form
+where you submit like the answers to your questions so the due date is in two
+weeks so you have't is it in two weeks in 10 days yeah so you have enough time
+to actually do the module that we have right now that starts today so the due date for that module will be in one week
+so then you have a bit of extra time to actually focus on that Workshop specifically then you will not have any
+other deadlines right so then you can just do that um so this is uh the
+homework I showed how to find it I think that's all I wanted to mention yeah so
+this is the the starter notbook that you can
+use I don't ah and then yeah there is one more question that I forgot to
+mention there's a question how DLT is different from DBT yes so um DBT is there to transform
+data DT is there to load data so uh DBT comes from data build tool it's uh once
+you've loaded data with DT you can use it to uh create a nice analytical model
+for that data um DLT is basically made to work very well with DL with the DBT
+but it won't help you transfer data you can actually run DBT with DLT uh so when
+DBT was built it was built to be set up in a way that is let's say not very python user friendly um so if you don't
+actually want to set up running DBT in your project you could just run it with the DT DBT Runner uh you can find it on
+our docs and that will basically inject credentials directly through python make your life a little
+easier and if we talk about e DT extract load transform so DLT is like the E
+letters right and DBT exactly but you know since dldt is a
+python Tool uh you can you know also do transformations in Python if you really want to like not with dld but you know
+your custom Transformations uh so we see people do all kinds of things but generally they just use it to throw the
+raw responses directly to the database and then they run DBT to work with the
+data yeah did we talk about um how to give you a star did you show
+so somebody asked if DT is an open source project yes it's an open source project please go yeah please show us
+everyone so everyone knows how to give you star okay let me share the screen um in case somebody doesn't know
+how to do that I'm sure like uh this is what we showed in our first through lecture we showed how to give a start to
+our data engineering course repo nice so yeah so you know if you are on our
+website uh don't miss the gbt button over here um and to Star us you know
+click on the star us link it will take you to GitHub you
+still have to do one more click it doesn't work you know just from clicking the link so you still have to click on
+uh star here um another thing that I might
+suggest to you is um we have a Blog and in this blog uh we have all kinds of uh
+articles from people so for example this is a user um sometimes we have Learners
+that I are creating articles um if you decide to do any kind
+of uh personal project and you want to showcase it we'll be glad to Showcase it so just uh you know join our slack and
+let us know and we'll either feature it on our blog or or something like that okay and for everyone who is
+watching the video which is 382 people while excluding me watching from my
+smartphone please like our video it will help the with the algorithm YouTube will
+spread this video so more people will actually get to see this um so please do
+that um yeah I don't know what else to mention apart from thanking you and the
+entire DT team for putting this together um I would say that's it and you know
+DLT is an open source tool so if you want to write about it if you want if
+you see something on docs that you don't like you could actually just click edit this page right and you'd uh be able to
+do your first uh contribution um open source contribution or you know we have people that uh so I
+can't encourage you to build uh and donate uh uh verified sources but if you
+are particularly Brave uh you can also try that
+okay yeah well I guess that's it then for today thanks a lot Adrian for
+preparing the workshop thanks everyone for joining us today if you're watching
+live or if you're watching on replay thanks for your time and have fun and
+again if you have any questions ask it in our slck or there is a you also have
+a chance channel for for this or you can you can just join our channel
+it's on top of the web page and you'll find a technical help Channel you can
+ask questions if you watch this video after the course is over you might not get support in our course channel so
+then this is definitely when you need to go to the DT um slack and this is when
+you will definitely get support okay then I guess we are wrapping up 10
+minutes earlier so I'll go get some tea and also talking for so long so yeah
+have a great rest of your day and see you soon
