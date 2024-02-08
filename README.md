@@ -456,3 +456,12 @@ Terraform will be used to deploy an app with Google Cloud Run, create a backend 
 
 
 
+## Module 3: Data Warehouse
+
+#### **02/07/2024** - Build it bigger.
+
+- Began working on Data Warehouse seciton by learning about big query and it's relationship to gcs
+- Created Mage pipeline to ingest all green taxi data for 2022
+  - Extracted 12 parquet files and combined into one
+  - Transformed them by correcting the column names
+  - Loaded them into GCS as a single file `green_taxi_2022.parquet`
