@@ -441,21 +441,7 @@ Terraform will be used to deploy an app with Google Cloud Run, create a backend 
    - **Cloud SQL Admin**
    - **Service Account Token Creator**
 - Download Terraform Mage Templates `git@github.com:mage-ai/mage-ai-terraform-templates.git`
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+---
 ## Module 3: Data Warehouse
 
 #### **02/07/2024** - Build it bigger.
@@ -465,3 +451,19 @@ Terraform will be used to deploy an app with Google Cloud Run, create a backend 
   - Extracted 12 parquet files and combined into one
   - Transformed them by correcting the column names
   - Loaded them into GCS as a single file `green_taxi_2022.parquet`
+
+#### **02/08/2024** - Big Query
+- Created an external table from green_taxi_2021 .parquet in Big Query
+- Directly added the table in big query
+- Got really stuck with partitioning the external table by `lpep_pickup_datetime`
+```sql 
+CREATE OR REPLACE TABLE zoomcamp-2024.ny_taxi.external_green_2022_partitoned
+PARTITION BY
+  DATE(lpep_pickup_datetime) AS
+SELECT * FROM zoomcamp-2024.ny_taxi.external_green_2022;
+```
+```
+ERROR: No matching signature for function DATE for argument types: INT64. Supported signatures: DATE(TIMESTAMP, [STRING]); DATE(DATETIME); DATE(INT64, INT64, INT64); DATE(DATE); DATE(STRING) at [4:3]
+```
+  - It has an int64 dtype and the values are similar to`1640996061000000000`
+  - This is not as expected.  I neet to figure out if there is a problem with the way that I have ingested the data or if there is a way I can modify it in BigQuery

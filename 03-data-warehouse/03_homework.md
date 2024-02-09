@@ -1,22 +1,24 @@
-## Week 3 Homework
-ATTENTION: At the end of the submission form, you will be required to include a link to your GitHub repository or other public code-hosting site. This repository should contain your code for solving the homework. If your solution includes code that is not in file format (such as SQL queries or shell commands), please include these directly in the README file of your repository.
+# Week 3 Homework
+For this homework I used the 2022 Green Taxi Trip Record Parquet Files from the New York
+City Taxi Data found [here](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page).  I used Mage as an orchestrator to load the parquet files into a Google Cloud Storage Bucket.
 
-<b><u>Important Note:</b></u> <p> For this homework we will be using the 2022 Green Taxi Trip Record Parquet Files from the New York
-City Taxi Data found here: </br> https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page </br>
-If you are using orchestration such as Mage, Airflow or Prefect do not load the data into Big Query using the orchestrator.</br> 
-Stop with loading the files into a bucket. </br></br>
-
-> # I used mage for this. Here's my pipeline code.
-    > ## - [Load](https://github.com/Claytor/data_talks_data_engineering_zoomcamp_2024/blob/main/03-data-warehouse/mage_data_warehouse/03-data-warehouse/data_loaders/load_green_taxi_2022.py)
-> ## - [Transform](https://github.com/Claytor/data_talks_data_engineering_zoomcamp_2024/blob/main/03-data-warehouse/mage_data_warehouse/03-data-warehouse/transformers/transform_green_taxi_2022.py)
-> ## - [Export](https://github.com/Claytor/data_talks_data_engineering_zoomcamp_2024/blob/main/03-data-warehouse/mage_data_warehouse/03-data-warehouse/data_exporters/green_taxi_2022_to_gcs.py)
-
-![alt text](../images/03_hw_pipeline.png)
-<u>NOTE:</u> You will need to use the PARQUET option files when creating an External Table</br>
+## Mage Orchestration Pipeline
+1) [`load_green_taxi_2022.py`](https://github.com/Claytor/data_talks_data_engineering_zoomcamp_2024/blob/main/03-data-warehouse/mage_data_warehouse/03-data-warehouse/data_loaders/load_green_taxi_2022.py)
+2) [`transform_green_taxi_2022.py`](https://github.com/Claytor/data_talks_data_engineering_zoomcamp_2024/blob/main/03-data-warehouse/mage_data_warehouse/03-data-warehouse/transformers/transform_green_taxi_2022.py)
+3) [`export_green_taxi_2022`](https://github.com/Claytor/data_talks_data_engineering_zoomcamp_2024/blob/main/03-data-warehouse/mage_data_warehouse/03-data-warehouse/data_exporters/green_taxi_2022_to_gcs.py)
+> ![alt text](../images/03_hw_pipeline.png)
+**NOTE:** You will need to use the PARQUET option files when creating an External Table
 
 **SETUP**
-- Create an external table using the Green Taxi Trip Records Data for 2022.
-- Create a table in BQ using the Green Taxi Trip Records for 2022 
+1) Create an external table using the Green Taxi Trip Records Data for 2022.
+```sql 
+CREATE OR REPLACE EXTERNAL TABLE `zoomcamp-2024.ny_taxi.external_green_2022`
+OPTIONS (
+  format = 'Parquet',
+  uris = ['gs://claytor-mage/green_taxi_2022.parquet']
+);
+```
+2) Create a table in BQ using the Green Taxi Trip Records for 2022 
     > (do not partition or cluster this table).
 
 
