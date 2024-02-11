@@ -1,4 +1,5 @@
 import re
+import pandas as pd
 def camel_to_snake(name):
     """
     Convert a CamelCase name into snake_case.
@@ -10,16 +11,22 @@ def camel_to_snake(name):
 def transform(data, *args, **kwargs):
     # Convert column names from CamelCase to snake_case
     data.columns = [camel_to_snake(column) for column in data.columns]
+    
+    # Convert datetime fields to the right precision (seconds)
+    datetime_columns = ['lpep_pickup_datetime', 'lpep_dropoff_datetime']
+    for col in datetime_columns:
+        if pd.api.types.is_integer_dtype(data[col]) or pd.api.types.is_float_dtype(data[col]):
+            # Convert from UNIX epoch time in nanoseconds to datetime
+            data[col] = pd.to_datetime(data[col] / 1e9, unit='s')
+        elif pd.api.types.is_datetime64_any_dtype(data[col]):
+            # Convert to the right precision (seconds)
+            data[col] = data[col].dt.floor('S')
 
-    # Counting rows with specific conditions
-    null_vendor_id_count = data['vendor_id'].isnull().sum()
-    zeros_passenger_count = data[data['passenger_count'] == 0].shape[0]
-    zeros_trip_distance_count = data[data['trip_distance'] == 0].shape[0]
-    zeros_fare_amount_count = data[data['fare_amount'] == 0].shape[0]
-
-    # assert null_vendor_id_count == 0, "There are rides with null vendor_id 🚕"
-    print(f'🚕 rides where vendor is null: {null_vendor_id_count}')
-    print(f'🚖 rides with zero passengers: {zeros_passenger_count}')
-    print(f'🛣️ rides with zero trip distance: {zeros_trip_distance_count}')
-    print(f'💲 rides with zero fare amount: {zeros_fare_amount_count}')
+    # For INTEGER fields
+    integer_columns = ['vendor_id', 'passenger_count', 'ratecode_id', 'PULocationID', 'DOLocationID', 'payment_type']
+    for column in integer_columns:
+        data[column] = data[column].astype(pd.Int64Dtype())
+    
+    print(data.info())
     return data
+    

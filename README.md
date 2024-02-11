@@ -463,7 +463,8 @@ PARTITION BY
 SELECT * FROM zoomcamp-2024.ny_taxi.external_green_2022;
 ```
 ```
-ERROR: No matching signature for function DATE for argument types: INT64. Supported signatures: DATE(TIMESTAMP, [STRING]); DATE(DATETIME); DATE(INT64, INT64, INT64); DATE(DATE); DATE(STRING) at [4:3]
+No matching signature for function DATE for argument types: INT64. Supported signatures: DATE(TIMESTAMP, [STRING]); DATE(DATETIME); DATE(INT64, INT64, INT64); DATE(DATE); DATE(STRING) at [4:3]
 ```
-  - It has an int64 dtype and the values are similar to`1640996061000000000`
-  - This is not as expected.  I neet to figure out if there is a problem with the way that I have ingested the data or if there is a way I can modify it in BigQuery
+  - It has an int64 dtype and the values are similar to `1640996061000000000`. T his is a unix timestamp in milliseconds.
+   > Note to self: RESPECT TIME WHEN INGESTING !!!!!! 
+  - This is not as expected.  I neet to figure out if there is a problem with the way that I have ingested the data BigQuery to make sure it's automatic schema detection works correctly.

@@ -1,6 +1,7 @@
 import io
 import pandas as pd
 import requests
+from time import time
 if 'data_loader' not in globals():
     from mage_ai.data_preparation.decorators import data_loader
 if 'test' not in globals():
@@ -38,12 +39,10 @@ def load_data_from_api(*args, **kwargs):
     # for loop to read url, change dtypes, and parse dates
     dataframes = []
     for url in urls:
-        df = pd.read_parquet(
-            url #,
-            #sep = ','
-        )
+        df = pd.read_parquet(url)
         dataframes.append(df)
     all_data = pd.concat(dataframes, ignore_index = True)
+    #return all_data.head(n=5)
     return all_data
 
 @test
