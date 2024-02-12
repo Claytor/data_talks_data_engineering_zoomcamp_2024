@@ -468,3 +468,16 @@ No matching signature for function DATE for argument types: INT64. Supported sig
   - It has an int64 dtype and the values are similar to `1640996061000000000`. T his is a unix timestamp in milliseconds.
    > Note to self: RESPECT TIME WHEN INGESTING !!!!!! 
   - This is not as expected.  I neet to figure out if there is a problem with the way that I have ingested the data BigQuery to make sure it's automatic schema detection works correctly.
+
+#### **02/09/2024** - Busted pipes
+
+- I tried my best to make sure that my pipeline was correctly addressing dtypes.  I ran several versions of the code, but I simply could not force the paraquet to handle the date_time columns in a way that Big Querie's auto schema detector would understand.  Having found no solution after several hours, I decided to unplug and spend some time with my family.  I know that I will need to partition and cluster the big query table based on date, but the date_time columns just won't behave.
+
+#### **02/11/2024** - Eurika!
+- Although I couldn't figure out a way to make the parquet behave in the external table, when I created the materialized table, I utilized this code in my select statement
+```sql
+TIMESTAMP_MICROS(DIV(lpep_pickup_datetime, 1000)) AS lpep_pickup_timestamp,
+TIMESTAMP_MICROS(DIV(lpep_dropoff_datetime, 1000)) AS lpep_dropoff_timestamp,
+```
+- Admittedly, I used too much time trying to fix a percieved problem in my pipeline, when I should have turned to big query to help me in the first place.  I don't know If what I did was "best practice" but it was a workable solution.
+- I finished my homework.

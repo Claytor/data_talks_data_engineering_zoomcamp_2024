@@ -22,10 +22,19 @@ def transform(data, *args, **kwargs):
             # Convert to the right precision (seconds)
             data[col] = data[col].dt.floor('S')
 
-    # For INTEGER fields
-    integer_columns = ['vendor_id', 'passenger_count', 'ratecode_id', 'PULocationID', 'DOLocationID', 'payment_type']
-    for column in integer_columns:
-        data[column] = data[column].astype(pd.Int64Dtype())
+    # Convert integer fields to nullable integers
+    integer_columns = ['vendor_id', 'passenger_count', 'ratecode_id', 'pu_location_id', 'do_location_id', 'payment_type']
+    for col in integer_columns:
+        if col in data.columns:
+            data[col] = data[col].astype(pd.Int64Dtype())
+
+    # For FLOAT fields
+    float_columns = ['trip_distance', 'fare_amount', 'extra', 'mta_tax', 'tip_amount', 'tolls_amount', 'improvement_surcharge', 'total_amount', 'congestion_surcharge']
+    for column in float_columns:
+        data[column] = data[column].astype(float)
+
+    # For BOOLEAN fields, assuming store_and_fwd_flag is 'Y'/'N'
+    data['store_and_fwd_flag'] = data['store_and_fwd_flag'].map({'Y': True, 'N': False}).astype('boolean')
     
     print(data.info())
     return data
