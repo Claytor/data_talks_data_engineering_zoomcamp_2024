@@ -489,4 +489,7 @@ TIMESTAMP_MICROS(DIV(lpep_dropoff_datetime, 1000)) AS lpep_dropoff_timestamp,
 - Practiced viewing, manipulating, and querying duck db
 - Practiced appending and merging tables with duck db
 - made many duck-based jokes.
-  
+
+## Module 4 Workshop: [Analytics Engineering](https://github.com/DataTalksClub/data-engineering-zoomcamp/tree/main/04-analytics-engineering)
+
+- Created New 
