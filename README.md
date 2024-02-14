@@ -481,3 +481,12 @@ TIMESTAMP_MICROS(DIV(lpep_dropoff_datetime, 1000)) AS lpep_dropoff_timestamp,
 ```
 - Admittedly, I used too much time trying to fix a percieved problem in my pipeline, when I should have turned to big query to help me in the first place.  I don't know If what I did was "best practice" but it was a workable solution.
 - I finished my homework.
+
+## Module 3 Workshop: Data Ingestion
+
+- Practiced with numeric generator functions in python.
+- Created a pipelines with DLT to load data from generator functions to duckdb
+- Practiced viewing, manipulating, and querying duck db
+- Practiced appending and merging tables with duck db
+- made many duck-based jokes.
+  

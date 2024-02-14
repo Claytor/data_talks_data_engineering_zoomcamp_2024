@@ -1,0 +1,3 @@
+{"operation": "create", "resource": {"type": "pipeline", "uuid": "whimsical_pine"}, "timestamp": 1707146853, "user": null}
+{"operation": "create", "resource": {"type": "pipeline", "uuid": "gcp_to_bigquery_copy"}, "timestamp": 1707147173, "user": null}
+{"operation": "create", "resource": {"type": "pipeline", "uuid": "load_to_gcp_copy"}, "timestamp": 1707147243, "user": null}
