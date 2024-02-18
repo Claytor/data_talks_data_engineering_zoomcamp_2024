@@ -1,0 +1,3 @@
+packages:
+  - package: dbt-labs/dbt/utils
+    verson: 1.1.1
