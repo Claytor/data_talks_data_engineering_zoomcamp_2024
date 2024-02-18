@@ -1,0 +1,12 @@
+# Define verson
+version: 2
+
+# Define sources
+sources:
+  - name: staging
+    database: zoomcamp-2024
+    schema: trips_data_all
+
+    tables:
+      - name: green_tripdata
+      - name: yellow_tripdata
