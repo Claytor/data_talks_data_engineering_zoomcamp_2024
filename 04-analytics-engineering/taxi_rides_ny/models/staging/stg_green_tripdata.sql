@@ -27,7 +27,6 @@ select
     store_and_fwd_flag,
     passenger_count,
     trip_distance,
-    SAFE_CAST(SPLIT(trip_type, '.')[SAFE_OFFSET(0)] AS STRING) As trip_type,
 
     -- payment info
     fare_amount,
@@ -35,7 +34,6 @@ select
     mta_tax,
     tip_amount,
     tolls_amount,
-    ehail_fee,
     imp_surcharge,
     total_amount,
     SAFE_CAST(SPLIT(payment_type, '.')[SAFE_OFFSET(0)] AS STRING) as payment_type,
