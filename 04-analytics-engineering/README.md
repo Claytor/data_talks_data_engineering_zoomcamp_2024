@@ -94,7 +94,7 @@ sankey-beta
         when '6' then 'Voided trip'
         else 'EMPTY'
     end
-{%- endmacro %}
+    {%- endmacro %}
     ```
 2) Now go back to the `stg_green_tripdata.sql` file and apply the macro to the `payment_type` column
     ```sql
@@ -121,7 +121,9 @@ sankey-beta
     select
         {{ dbt_utils.generate_surrogate_key(['vendor_id', 'pickup_datetime']) }} as trip_id,
     ```
+    > Note: I removed `trip_type` and `ehail` from `stg_green_taxidata` because they are not present in `stg_yellow_taxidata`.  I believe this is because I'm using an imported public big query dataset.  Code from the video should be modified in this way so that the unions will work.
 1) click `</> compile` key to see changes
+1) you can now apply the same template to `stg_yellow_tripdata` to add it to the pipeline.
 
 ## 4) Creating Seeds in DBT
 
@@ -134,7 +136,7 @@ sankey-beta
     {{ config(materialized='table') }}
 
     select 
-        locationid as location_id, 
+        SAFE_CAST(locationid as STRING) as location_id, 
         borough, 
         zone, 
         replace(service_zone,'Boro','Green') as service_zone 
@@ -142,5 +144,11 @@ sankey-beta
     ```
 1) Create a fact table `fact_trips.sql`.  We will materialize this as a table to make our quieries more performant (efficient).  
     > The closer you are to the BI tool, the more performant a table should be.  That is why we are making it persistent.  If the joins had to happen in real-time, it would be extremely slow.
-1)
-1)
+
+## 5) Running the Entire Pipeline
+
+Once you are sure that your code is correct, you can run all steps in the pipeline by running the following command in the console:
+
+```sh
+dbt build --select +fact_trips+ --vars '{"is_test_run": "false"}'
+```
