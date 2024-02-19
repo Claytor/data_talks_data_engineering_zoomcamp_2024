@@ -37,7 +37,10 @@ select
     imp_surcharge,
     total_amount,
     {{ dbt.safe_cast("payment_type", api.Column.translate_type("string")) }} as payment_type,
-    {{ get_payment_type_description("payment_type") }} as payment_type_description
+    {{ get_payment_type_description("payment_type") }} as payment_type_description,
+    {{ dbt.safe_cast("data_file_year", api.Column.translate_type("string")) }} as data_file_year,
+    {{ dbt.safe_cast("data_file_month", api.Column.translate_type("string")) }} as data_file_month
+
 from tripdata
 where rn = 1
 
