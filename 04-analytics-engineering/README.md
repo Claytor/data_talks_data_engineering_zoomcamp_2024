@@ -74,18 +74,26 @@ sankey-beta
 
 > This had to be adjusted from the example videos.  Although the `payment_type` is stored as a string, its values look like floats (e.g. 1.0).  I spent HOURS!!! but I finally got dbt to behave and build successfully.
 
+> Also Rrealized that the 'payment_type' is not coded the same across yellow_tripdata and green_tripdata.
+
 1) create `get_payment_type_description.sql` in macros folder
     ``` yml
     {% macro get_payment_type_description(payment_type) -%}
-        case {{ payment_type }}
-            when '1.0' then 'Credit card'
-            when '2.0' then 'Cash'
-            when '3.0' then 'No charge'
-            when '4.0' then 'Dispute'
-            when '5.0' then 'Unknown'
-            when '6.0' then 'Voided trip'
-            else 'EMPTY'
-        end
+    case {{ payment_type }}
+        when '1.0' then 'Credit card'
+        when '1' then 'Credit card'
+        when '2.0' then 'Cash'
+        when '2' then 'Cash'
+        when '3.0' then 'No charge'
+        when '3' then 'No charge'
+        when '4.0' then 'Dispute'
+        when '4' then 'Dispute'
+        when '5.0' then 'Unknown'
+        when '5' then 'Unknown'
+        when '6.0' then 'Voided trip'
+        when '6' then 'Voided trip'
+        else 'EMPTY'
+    end
 {%- endmacro %}
     ```
 2) Now go back to the `stg_green_tripdata.sql` file and apply the macro to the `payment_type` column
@@ -114,3 +122,25 @@ sankey-beta
         {{ dbt_utils.generate_surrogate_key(['vendor_id', 'pickup_datetime']) }} as trip_id,
     ```
 1) click `</> compile` key to see changes
+
+## 4) Creating Seeds in DBT
+
+1) create `taxi_zone_lookup.csv` under `seeds` folder.
+1) insert raw csv code into file
+1) compile and build.  It should show up on GCP
+1) Make a `core` directory under the `models` directory
+1) Create a dimension table `dim_zones.sql`.  Notice how it references `taxi_zone_lookup` seed that was created
+    ```sql
+    {{ config(materialized='table') }}
+
+    select 
+        locationid as location_id, 
+        borough, 
+        zone, 
+        replace(service_zone,'Boro','Green') as service_zone 
+    from {{ ref('taxi_zone_lookup') }}
+    ```
+1) Create a fact table `fact_trips.sql`.  We will materialize this as a table to make our quieries more performant (efficient).  
+    > The closer you are to the BI tool, the more performant a table should be.  That is why we are making it persistent.  If the joins had to happen in real-time, it would be extremely slow.
+1)
+1)
