@@ -14,18 +14,31 @@ with tripdata as
 select
     -- identifiers
     {{ dbt_utils.generate_surrogate_key(['vendor_id', 'pickup_datetime']) }} as trip_id,
-    {{ dbt.safe_cast("vendor_id", api.Column.translate_type("integer")) }} as vendor_id,
-    {{ dbt.safe_cast("rate_code", api.Column.translate_type("integer")) }} as ratecode_id,
-    {{ dbt.safe_cast("pickup_location_id", api.Column.translate_type("integer")) }} as pickup_location_id,
-    {{ dbt.safe_cast("dropoff_location_id", api.Column.translate_type("integer")) }} as dropoff_location_id,
+    {{ dbt.safe_cast("vendor_id", api.Column.translate_type("string")) }} as vendor_id,
+    {{ dbt.safe_cast("rate_code", api.Column.translate_type("string")) }} as ratecode_id,
+    {{ dbt.safe_cast("pickup_location_id", api.Column.translate_type("string")) }} as pickup_location_id,
+    {{ dbt.safe_cast("dropoff_location_id", api.Column.translate_type("string")) }} as dropoff_location_id,
+    
+    -- timestamps
+    pickup_datetime,
+    dropoff_datetime,
     
     -- trip info
     store_and_fwd_flag,
-    {{ dbt.safe_cast("passenger_count", api.Column.translate_type("integer")) }} as passenger_count,
-    cast(trip_distance as numeric) as trip_distance,
-    {{ dbt.safe_cast("trip_type", api.Column.translate_type("integer")) }} as trip_type,
+    passenger_count,
+    trip_distance,
+    trip_type,
 
     -- payment info
+    fare_amount,
+    extra,
+    mta_tax,
+    tip_amount,
+    tolls_amount,
+    ehail_fee,
+    imp_surcharge,
+    total_amount,
+    payment_type,
     {{ get_payment_type_description("payment_type") }} as payment_type_description
 from tripdata
 where rn = 1
