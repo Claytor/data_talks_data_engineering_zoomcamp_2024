@@ -8,7 +8,7 @@ with tripdata as
 (
   select *,
     row_number() over(partition by vendor_id, pickup_datetime) as rn
-  from {{ source('staging','green_tripdata') }}
+  from {{ source('staging','yellow_tripdata') }}
   where vendor_id is not null 
 )
 select
@@ -27,7 +27,6 @@ select
     store_and_fwd_flag,
     passenger_count,
     trip_distance,
-    SAFE_CAST(SPLIT(trip_type, '.')[SAFE_OFFSET(0)] AS STRING) As trip_type,
 
     -- payment info
     fare_amount,
@@ -35,10 +34,9 @@ select
     mta_tax,
     tip_amount,
     tolls_amount,
-    ehail_fee,
     imp_surcharge,
     total_amount,
-    SAFE_CAST(SPLIT(payment_type, '.')[SAFE_OFFSET(0)] AS STRING) as payment_type,
+    {{ dbt.safe_cast("payment_type", api.Column.translate_type("string")) }} as payment_type,
     {{ get_payment_type_description("payment_type") }} as payment_type_description
 from tripdata
 where rn = 1
