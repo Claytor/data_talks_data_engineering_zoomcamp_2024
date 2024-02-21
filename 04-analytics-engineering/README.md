@@ -125,7 +125,7 @@ sankey-beta
 1) click `</> compile` key to see changes
 1) you can now apply the same template to `stg_yellow_tripdata` to add it to the pipeline.
 
-## 4) Creating Seeds in DBT
+## 5) Creating Seeds in DBT
 
 1) create `taxi_zone_lookup.csv` under `seeds` folder.
 1) insert raw csv code into file
@@ -145,10 +145,43 @@ sankey-beta
 1) Create a fact table `fact_trips.sql`.  We will materialize this as a table to make our quieries more performant (efficient).  
     > The closer you are to the BI tool, the more performant a table should be.  That is why we are making it persistent.  If the joins had to happen in real-time, it would be extremely slow.
 
-## 5) Running the Entire Pipeline
+## 6) Running the Entire Pipeline
 
 Once you are sure that your code is correct, you can run all steps in the pipeline by running the following command in the console:
 
 ```sh
 dbt build --select +fact_trips+ --vars '{"is_test_run": "false"}'
 ```
+
+## 7) Testing and documenting dbt models
+
+### 1) Tests
+
+- We are going to use dbt codegen [generate_model_yaml](https://github.com/dbt-labs/dbt-codegen/tree/0.12.1/?tab=readme-ov-file#generate_model_yaml-source) This macro generates the YAML for a list of model(s), which you can then paste into a schema.yml file.
+    1) Type the following command into a new file and compile it:
+        ``` yaml
+        {% set models_to_generate = codegen.get_models(directory='staging', prefix='stg') %}
+        {{ codegen.generate_model_yaml(
+              model_names = models_to_generate
+        ) }}
+        ```
+    1) Past the output into the `schema.yml` file in the staging directory.  Now we can add tests to entries in the schema.
+    
+        - make sure the `trip_id` values are unique
+            ```yml
+            tests:
+            - unique:
+                severity: warn
+            - not_null:
+                severity: warn
+            ```
+        - make sure that the zone value is valid and present in the lookup table.  Do this for all picup_location_id and dropoff_location_ids
+            ```yaml
+            tests:
+            - relationships:
+                field: locationid
+                to: ref('taxi_zone_lookup')
+            - severity: warn
+            ```
+
+### 2 ) Documentation
