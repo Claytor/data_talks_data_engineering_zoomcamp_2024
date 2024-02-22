@@ -5,7 +5,7 @@ variable "credentials" {
 variable "app_name" {
   type        = string
   description = "Application Name"
-  default     = "mage-data-prep"
+  default     = "claytor_mage_cloud"
 }
 
 variable "container_cpu" {
@@ -39,13 +39,13 @@ variable "zone" {
 variable "repository" {
   type        = string
   description = "The name of the Artifact Registry repository to be created"
-  default     = "mage-data-prep"
+  default     = "clatyor_mage_cloudrun"
 }
 
 variable "database_user" {
   type        = string
   description = "The username of the Postgres database."
-  default     = "mageuser"
+  default     = "claytor"
 }
 
 variable "database_password" {
