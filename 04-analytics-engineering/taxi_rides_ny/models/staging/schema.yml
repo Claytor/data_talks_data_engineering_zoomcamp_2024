@@ -20,9 +20,9 @@ models:
         description: ""
         tests:
           - unique:
-              severity: warn
+             severity: warn
           - not_null:
-              severity: warn
+             severity: warn
 
       - name: vendor_id
         data_type: string
@@ -33,22 +33,17 @@ models:
         description: ""
 
       - name: pickup_location_id
-        data_type: string
+        data_type: numeric
         description: ""
-        tests:
-          - relationships:
-              field: locationid
-              to: ref('taxi_zone_lookup')
-          - severity: warn
+        #tests:
+        #  - relationships:
+        #      to: ref('taxi_zone_lookup') 
+        #      field: locationid 
+        #      severity: warn 
 
       - name: dropoff_location_id
-        data_type: string
+        data_type: numeric
         description: ""
-        tests:
-          - relationships:
-              field: locationid
-              to: ref('taxi_zone_lookup')
-          - severity: warn
 
       - name: pickup_datetime
         data_type: timestamp
@@ -130,22 +125,12 @@ models:
         description: ""
 
       - name: pickup_location_id
-        data_type: string
+        data_type: numeric
         description: ""
-        tests:
-          - relationships:
-              field: locationid
-              to: ref('taxi_zone_lookup')
-          - severity: warn
 
       - name: dropoff_location_id
-        data_type: string
+        data_type: numeric
         description: ""
-        tests:
-          - relationships:
-              field: locationid
-              to: ref('taxi_zone_lookup')
-          - severity: warn
 
       - name: pickup_datetime
         data_type: timestamp

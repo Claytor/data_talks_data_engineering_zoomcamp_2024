@@ -16,7 +16,7 @@ select
     {{ dbt_utils.generate_surrogate_key(['vendor_id', 'pickup_datetime']) }} as trip_id,
     {{ dbt.safe_cast("vendor_id", api.Column.translate_type("string")) }} as vendor_id,
     SAFE_CAST(SPLIT(rate_code, '.')[SAFE_OFFSET(0)] AS STRING) as rate_code,
-    {{ dbt.safe_cast("pickup_location_id", api.Column.translate_type("string")) }} as pickup_location_id,
+    {{ dbt.safe_cast("pickup_location_id", api.Column.translate_type("string")) }} as  pickup_location_id,
     {{ dbt.safe_cast("dropoff_location_id", api.Column.translate_type("string")) }} as dropoff_location_id,
     
     -- timestamps

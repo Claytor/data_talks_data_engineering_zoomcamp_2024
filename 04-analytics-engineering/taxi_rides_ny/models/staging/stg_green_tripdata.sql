@@ -36,12 +36,14 @@ select
     tolls_amount,
     imp_surcharge,
     total_amount,
-    SAFE_CAST(SPLIT(payment_type, '.')[SAFE_OFFSET(0)] AS STRING) as payment_type,
+    {{ dbt.safe_cast("payment_type", api.Column.translate_type("string")) }} as payment_type,
     {{ get_payment_type_description("payment_type") }} as payment_type_description,
     {{ dbt.safe_cast("data_file_year", api.Column.translate_type("string")) }} as data_file_year,
     {{ dbt.safe_cast("data_file_month", api.Column.translate_type("string")) }} as data_file_month
+
 from tripdata
 where rn = 1
+
 
 -- dbt build --select <model_name> --vars '{'is_test_run': 'false'}'
 {% if var('is_test_run', default=true) %}
