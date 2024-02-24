@@ -122,7 +122,9 @@ models:
         description: Month that the trip took place
 
   - name: dim_zones
-    description: List of unique zones idefied by location_id. Includes the service zone they correspond to (Green or yellow).
+    description: >
+      List of unique zones idefied by location_id. 
+      Includes the service zone they correspond to (Green or Yellow).
     columns:
       - name: location_id
         data_type: string
